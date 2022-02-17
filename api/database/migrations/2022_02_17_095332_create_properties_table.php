@@ -31,12 +31,17 @@ return new class extends Migration
             $table->boolean('is_kitchen_separated')->default(false);
             $table->boolean('contains_dining_room')->default(false);
             $table->enum('ground', ['wood', 'rock'])->default('wood'); // Type de sol
-            $table->enum('heater', ['electrical', 'gaz'])->default('gaz');
+            $table->enum('heater', ['electrical', 'gas'])->default('gas');
             $table->boolean('fireplace')->default(false);
             $table->boolean('elevator')->default(false);
             $table->boolean('external_storage')->default(false);
-            $table->float('area_external_storage');
+            $table->float('area_external_storage')->default(0);
             $table->boolean('guarding')->default(false);
+            $table->integer('energy_consumption')->default(0);
+            $table->integer('gas_emissions')->default(0);
+            $table->string('address');
+            $table->string('zip_code', 5);
+            
 
 
             $table->date('construction_date');
