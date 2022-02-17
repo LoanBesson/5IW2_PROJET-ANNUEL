@@ -40,8 +40,8 @@ return new class extends Migration
             $table->integer('energy_consumption')->default(0);
             $table->integer('gas_emissions')->default(0);
             $table->string('address');
-            $table->string('zip_code', 5);
-            
+            $table->integer('zip_code', 5);
+            $table->string('city');
 
 
             $table->date('construction_date');
