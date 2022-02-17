@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreContactRequest;
 use App\Http\Requests\UpdateContactRequest;
+use App\Http\Resources\ContactResource;
 use App\Models\Contact;
 
 class ContactController extends Controller
@@ -15,7 +16,7 @@ class ContactController extends Controller
      */
     public function index()
     {
-        //
+        return ContactResource::collection(Contact::all());
     }
 
 
@@ -27,7 +28,12 @@ class ContactController extends Controller
      */
     public function store(StoreContactRequest $request)
     {
-        //
+        $contact = Contact::create($request->all());
+
+        return response()->json([
+            'message' => 'Successfully registered!',
+            'data' => new ContactResource($contact)
+        ], 201);
     }
 
     /**
@@ -38,7 +44,7 @@ class ContactController extends Controller
      */
     public function show(Contact $contact)
     {
-        //
+        return new ContactResource($contact);
     }
 
 
@@ -51,7 +57,12 @@ class ContactController extends Controller
      */
     public function update(UpdateContactRequest $request, Contact $contact)
     {
-        //
+        $contact->update($request->all());
+
+        return response()->json([
+            'message' => 'Successfully updated!',
+            'data' => new ContactResource($contact)
+        ], 201);
     }
 
     /**
@@ -62,6 +73,8 @@ class ContactController extends Controller
      */
     public function destroy(Contact $contact)
     {
-        //
+        $contact->delete();
+
+        return response('', 204);
     }
 }

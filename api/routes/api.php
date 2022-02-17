@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PropertyController;
+use App\Http\Controllers\ContactController;
 use App\Http\Controllers\PassportAuthController;
 
 /*
@@ -20,6 +21,7 @@ Route::post('login', [PassportAuthController::class, 'login']);
 
 Route::middleware('auth:api')->group(function () {
     Route::get('get-user', [PassportAuthController::class, 'userInfo']);
-    Route::resource('contact', ContactController::class)->except(['create', 'edit']);
     Route::resource('property', PropertyController::class)->except(['create', 'edit']);
+    Route::resource('contact', ContactController::class)->except(['create', 'edit']);
 });
+
