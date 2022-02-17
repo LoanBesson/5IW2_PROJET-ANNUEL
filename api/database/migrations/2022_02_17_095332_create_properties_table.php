@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('properties', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->constrained();
             $table->string('title');
             $table->text('description');
             $table->enum('type', ['appartment', 'house'])->default('appartment');
@@ -40,10 +41,16 @@ return new class extends Migration
             $table->integer('energy_consumption')->default(0);
             $table->integer('gas_emissions')->default(0);
             $table->string('address');
-            $table->string('zip_code', 5);
-            
-
-
+            $table->integer('zip_code');
+            $table->string('city');
+            $table->enum('rentOrSale', ['rent', 'sale'])->default('sale');
+            $table->float('price');
+            $table->float('charges');
+            $table->float('guarentee');
+            $table->float('fees_price');
+            $table->float('inventory_price');
+            $table->boolean('published');
+            $table->string('image_path');
             $table->date('construction_date');
             $table->timestamps();
         });
