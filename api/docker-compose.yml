@@ -3,7 +3,7 @@ version: '3'
 services:
     laravel.test:
         build:
-            context: ./api/vendor/laravel/sail/runtimes/8.1
+            context: ./vendor/laravel/sail/runtimes/8.1
             dockerfile: Dockerfile
             args:
                 WWWGROUP: '${WWWGROUP}'
@@ -18,24 +18,11 @@ services:
             XDEBUG_MODE: '${SAIL_XDEBUG_MODE:-off}'
             XDEBUG_CONFIG: '${SAIL_XDEBUG_CONFIG:-client_host=host.docker.internal}'
         volumes:
-            - './api:/var/www/html'
+            - '.:/var/www/html'
         networks:
             - sail
         depends_on:
             - pgsql
-    angular-ui:
-        build:
-            context: ./app
-            dockerfile: Dockerfile
-        container_name: angular-ui
-        command: ng serve --host 0.0.0.0 --port 4200
-        ports:
-            - "4200:4200"
-        volumes:
-            - ./ClientApp:/usr/src/app
-            - /usr/src/app/node_modules
-        networks:
-            - sail
     pgsql:
         image: 'postgres:13'
         ports:

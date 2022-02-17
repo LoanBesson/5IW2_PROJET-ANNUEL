@@ -17,6 +17,28 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->text('description');
+            $table->enum('type', ['appartment', 'house'])->default('appartment');
+            $table->enum('category', ['T1', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'T8', 'T9'])->default('T1');
+            $table->float('area');
+            $table->integer('floor')->default(0);
+            $table->integer('floors')->default(1);
+            $table->integer('rooms')->default(1);
+            $table->integer('bedrooms')->default(0);
+            $table->integer('bathrooms')->default(0);
+            $table->integer('toilets')->default(0);
+            $table->boolean('is_furnished')->default(false);
+            $table->boolean('contains_storage')->default(false);
+            $table->boolean('is_kitchen_separated')->default(false);
+            $table->boolean('contains_dining_room')->default(false);
+            $table->enum('ground', ['wood', 'rock'])->default('wood'); // Type de sol
+            $table->enum('heater', ['electrical', 'gaz'])->default('gaz');
+            $table->boolean('fireplace')->default(false);
+            $table->boolean('elevator')->default(false);
+            $table->boolean('external_storage')->default(false);
+            $table->float('area_external_storage');
+            $table->boolean('guarding')->default(false);
+
+
             $table->date('construction_date');
             $table->timestamps();
         });
