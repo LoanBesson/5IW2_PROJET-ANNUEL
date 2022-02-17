@@ -2,7 +2,7 @@
 
 # Api
 cd api/ && \
-cp .env.exemple .env && \
+cp .env.example .env && \
 composer install && \
 sail up -d && \
 sail artisan key:generate && \
