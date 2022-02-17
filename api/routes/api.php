@@ -20,5 +20,5 @@ Route::post('login', [PassportAuthController::class, 'login']);
 
 Route::middleware('auth:api')->group(function () {
     Route::get('get-user', [PassportAuthController::class, 'userInfo']);
-    Route::resource('property', PropertyController::class);
+    Route::resource('property', PropertyController::class)->except(['create', 'edit']);
 });
