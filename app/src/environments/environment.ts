@@ -3,7 +3,12 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  appsettings: [
+    {url: '/assets/config.json', optionnal: false},
+    {url: '/assets/config.Development.json', optionnal: true}
+
+  ]
 };
 
 /*

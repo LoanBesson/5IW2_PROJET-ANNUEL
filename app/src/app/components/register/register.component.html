@@ -1,0 +1,23 @@
+<div class="row">
+    <div class="col-4 mt-5">
+        <div class="form-group">
+            <label for="name"> Votre prénom</label>
+            <input type="text" ngModel="" class="form-control" id="name" aria-describedby="emailHelp">
+        </div>
+        <div class="form-group">
+            <label for="email">Adresse mail</label>
+            <input type="email" class="form-control" id="email" aria-describedby="emailHelp">
+            <small id="emailHelp" class="form-text text-muted">Nous ne parrtagerons pas votre email.</small>
+        </div>
+        <div class="form-group">
+            <label for="password">Mot de passe</label>
+            <input type="password" class="form-control" id="password">
+        </div>
+        <button type="submit" (click)="register($event)" class="btn btn-primary">S'inscrire</button>
+    </div>
+    <div class="col-4 mt-5 ml-auto">
+        <button class="btn btn-primary mt-5 mb-3"> Se connecter avec Facebook</button>
+        <button class="btn btn-primary my-3"> Se connecter avec Google</button>
+        <button class="btn btn-primary mt-3"> Se connecter avec Amazon</button>
+    </div>
+</div>

@@ -1,0 +1,5 @@
+{
+    "apiEndpoint": {
+        "mainApi" : "http://localhost/api"
+    }
+}
