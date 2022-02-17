@@ -22,9 +22,6 @@ jobs:
     - name: Install Dependencies
       working-directory: api/
       run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
-    - name: Set up docker-compose
-      working-directory: api/
-      run: sail up -d 
     - name: Generate key
       working-directory: api/
       run: php artisan key:generate
