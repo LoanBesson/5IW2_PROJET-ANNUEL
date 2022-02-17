@@ -2,9 +2,10 @@ name: Laravel
 
 on:
   push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+    branches:
+      - master
+  pull_request: ~
+  workflow_dispatch: ~
 
 jobs:
   laravel-tests:
@@ -21,6 +22,8 @@ jobs:
     - name: Install Dependencies
       working-directory: api/
       run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+    - name: Add alias Sail
+      run: alias sail='[ -f sail ] && bash sail || bash vendor/bin/sail'
     - name: Generate key
       run: sail artisan key:generate
     - name: Directory Permissions
