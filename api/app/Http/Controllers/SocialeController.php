@@ -43,7 +43,7 @@ class SocialeController extends Controller
             $name = $data->getName();
 
 
-            $user = User::where("email", $email)->first();
+            $user = User::where('sociale_id', $user->id)->first();
 
 
             if (isset($user)) {
@@ -59,6 +59,7 @@ class SocialeController extends Controller
                 $user = User::create([
                     'name' => $name,
                     'email' => $email,
+                    'sociale_id'=> $user->id,
                     'password' => bcrypt("emilie")
                 ]);
             }
