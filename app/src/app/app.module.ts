@@ -5,11 +5,13 @@ import { AppComponent } from './app.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NavbarComponent } from './shared/components/navbar/navbar.component';
 import { RegisterComponent } from './components/register/register.component';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LoginComponent } from './components/login/login.component';
 import { HomeComponent } from './components/home/home.component';
 import { Page404Component } from './shared/components/page404/page404.component';
+import { RequestInterceptor } from './shared/interceptors/request.interceptor';
+import { ProfilComponent } from './components/profil/profil.component';
 
 
 @NgModule({
@@ -19,7 +21,8 @@ import { Page404Component } from './shared/components/page404/page404.component'
     RegisterComponent,
     LoginComponent,
     HomeComponent,
-    Page404Component
+    Page404Component,
+    ProfilComponent
   ],
   imports: [
 		BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -29,7 +32,8 @@ import { Page404Component } from './shared/components/page404/page404.component'
     FormsModule,
     ReactiveFormsModule
   ],
-  providers: [],
+  providers: [{ provide: HTTP_INTERCEPTORS, useClass: RequestInterceptor, multi: true },
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
