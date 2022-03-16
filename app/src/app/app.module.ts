@@ -8,6 +8,8 @@ import { RegisterComponent } from './components/register/register.component';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LoginComponent } from './components/login/login.component';
+import { HomeComponent } from './components/home/home.component';
+import { Page404Component } from './shared/components/page404/page404.component';
 
 
 @NgModule({
@@ -15,7 +17,9 @@ import { LoginComponent } from './components/login/login.component';
     AppComponent,
     NavbarComponent,
     RegisterComponent,
-    LoginComponent
+    LoginComponent,
+    HomeComponent,
+    Page404Component
   ],
   imports: [
 		BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
