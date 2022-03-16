@@ -4,17 +4,16 @@ import { AuthService } from 'src/app/shared/services/auth.service';
 import { FormBuilder } from '@angular/forms';
 
 @Component({
-  selector: 'app-register',
-  templateUrl: './register.component.html',
-  styleUrls: ['./register.component.css']
+  selector: 'app-login',
+  templateUrl: './login.component.html',
+  styleUrls: ['./login.component.css']
 })
-export class RegisterComponent implements OnInit {
+export class LoginComponent implements OnInit {
 
-  registerForm;
+  loginForm;
 
   constructor(private authService: AuthService, private formBuilder: FormBuilder) {
-    this.registerForm = this.formBuilder.group({
-      name: new String,
+    this.loginForm = this.formBuilder.group({
       email: [new String, Validators.email],
       password: new String,
     })
@@ -24,8 +23,8 @@ export class RegisterComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  register(): void {
-    this.authService.register(this.registerForm.value)
+  login(): void {
+    this.authService.login(this.loginForm.value)
       .subscribe({
         next: (v) => console.log(v.token),
         error: (e) => console.error(e),

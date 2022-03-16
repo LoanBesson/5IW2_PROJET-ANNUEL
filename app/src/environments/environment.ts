@@ -4,12 +4,9 @@
 
 export const environment = {
   production: false,
-  appsettings: [
-    {url: '/assets/config.json', optionnal: false},
-    {url: '/assets/config.Development.json', optionnal: true}
-
-  ]
+  baseUrl: 'http://localhost/api'
 };
+
 
 /*
  * For easier debugging in development mode, you can import the following file

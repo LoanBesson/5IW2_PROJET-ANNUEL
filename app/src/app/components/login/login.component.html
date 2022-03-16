@@ -1,9 +1,6 @@
-<form class="row" [formGroup]="registerForm" (ngSubmit)="register()">
+<h3 class="mt-5">Se connecter</h3>
+<form class="row" [formGroup]="loginForm" (ngSubmit)="login()">
     <div class="col-4 mt-5">
-        <div class="form-group">
-            <label for="name"> Votre prénom</label>
-            <input type="text" ngModel="" class="form-control" id="name" aria-describedby="emailHelp" formControlName="name">
-        </div>
         <div class="form-group">
             <label for="email">Adresse mail</label>
             <input type="email" class="form-control" id="email" aria-describedby="emailHelp" formControlName="email">
@@ -13,10 +10,10 @@
             <label for="password">Mot de passe</label>
             <input type="password" class="form-control" id="password" formControlName="password">
         </div>
-        <button type="submit" class="btn btn-primary">S'inscrire</button>
+        <button type="submit" class="btn btn-primary">Se connecter</button>
     </div>
     <div class="col-4 mt-5 ml-auto">
-        <button class="btn btn-primary mt-5 mb-3"> Se connecter avec Facebook</button>
+        <button class="btn btn-primary mt-3 mb-3"> Se connecter avec Facebook</button>
         <button class="btn btn-primary my-3"> Se connecter avec Google</button>
         <button class="btn btn-primary mt-3"> Se connecter avec Amazon</button>
     </div>

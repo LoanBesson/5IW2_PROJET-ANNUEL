@@ -1,49 +1,36 @@
-import { Injectable } from '@angular/core';
-import { environment } from 'src/environments/environment';
-import * as deepmerge from 'deepmerge';
+import { Injectable, InjectionToken } from "@angular/core";
+export const API_BASE_URL = new InjectionToken<string>('API_BASE_URL')
 
-@Injectable({
-  providedIn: 'root'
-})
+export function configServiceFactory(configurationService: ConfigurationService, file: string, property: string) {
+  return configurationService.load(file);
+}
+
+@Injectable()
 export class ConfigurationService {
+  constructor() {
 
-  public settings: AppSettings;
+  }
 
-  load(){
-    let requests: Promise<AppSettings>[] = [];
-    for (let env of environment.appsettings) {
-      requests.push(this.getConfigFile(env.url, env.optionnal))      
+  load(filepath: any) {
+    const json = this.getConfigFile(filepath, "application/json");
+    return json
+  }
+
+  public getConfigFile(filepath: any, mimeType: string) {
+    const xhr = new XMLHttpRequest();
+    xhr.open("GET", filepath, false)
+    if (mimeType != null) {
+      if (xhr.overrideMimeType) {
+        xhr.overrideMimeType(mimeType)
+      }
     }
-    return Promise.all(requests).then(settingsList => {
-      this.settings = deepmerge.all(settingsList) as AppSettings
-    })
+    xhr.send();
+    if (xhr.status === 200) {
+      console.log(xhr);
+      
+      return xhr.responseText
+    } else {
+      return null
+    }
   }
-
-  getConfigFile(uri: string, optionnal: boolean): Promise<any>{
-    return new Promise((resolve, reject) => {
-      const xhr = new XMLHttpRequest();
-      xhr.open('GET', 'assets/config.json');
-
-      xhr.addEventListener('readystatechange', () => {
-        if(xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
-          this.settings = JSON.parse(xhr.responseText) as AppSettings;          
-          resolve(this.settings)          
-        } else if (xhr.readyState === XMLHttpRequest.DONE) {
-          reject();
-        }
-      });
-      xhr.send(null)
-    });
-  }
-}
-
-export interface AppSettings {
-  apiEndpoints: {
-    mainApi: string
-  }
-}
-
-export function appSettingsServiceFactory(appSettingsService: ConfigurationService) {
-  console.log(appSettingsService.load());
-  return () => appSettingsService.load();
 }
