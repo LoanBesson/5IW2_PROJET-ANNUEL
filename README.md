@@ -19,17 +19,9 @@
 <br>
 
 ---
-### Front
----
-    cd app/ && \
-    npm install && \
-    ng serve --open
-<br>
-
----
 ### Liens
 ---
 
 #### Adminer : http://localhost:81
 #### Api : http://localhost/api
-#### Front : http://localhost:4200
+#### Front : https://github.com/Doriangue/frontPA
