@@ -5,21 +5,22 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Search extends Model
+class Favorite extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'type',
-        'category',
-        'city',
-        'min_price',
-        'max_price',
-        'searcher'
+        'user_id',
+        'property_id',
     ];
 
-    public function searcher()
+    public function user()
     {
         return $this->belongsTo(User::class, 'user_id', 'id');
+    }
+
+    public function property()
+    {
+        return $this->belongsTo(Property::class);
     }
 }

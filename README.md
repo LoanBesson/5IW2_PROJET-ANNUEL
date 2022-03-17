@@ -1,22 +1,35 @@
-# Installation du projet
+## Installation du projet
+<br>
 
-# Api
-cd api/ && \
-cp .env.exemple .env && \
-composer install && \
-sail up -d && \
-sail artisan key:generate && \
-sail artisan migrate && \
-sail artisan db:seed && \
-sail artisan passport:install
+---
+### Api
+---
+    cd api/ && \
+    cp .env.example .env && \
+    composer install && \
+    sail up -d && \
+    sail artisan key:generate && \
+    sail artisan migrate && \
+    sail artisan db:seed && \
+    sail artisan passport:install
 
-# Front
-cd app/ && \
-npm install && \
-ng serve --open
+#### En cas de problème de token
+    sail artisan passport:keys --force && \
+    sail artisan passport:install --force
+<br>
 
-# Lien Api
-http://localhost/api
+---
+### Front
+---
+    cd app/ && \
+    npm install && \
+    ng serve --open
+<br>
 
-# Lien front
-http://localhost:4200
+---
+### Liens
+---
+
+#### Adminer : http://localhost:81
+#### Api : http://localhost/api
+#### Front : http://localhost:4200

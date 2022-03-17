@@ -26,7 +26,6 @@ class PassportAuthController extends Controller
         ]);
 
         $token = $user->createToken('Laravel-9-Passport-Auth')->accessToken;
-
         return response()->json(['token' => $token], 200);
     }
 
@@ -54,10 +53,7 @@ class PassportAuthController extends Controller
 
     public function userInfo()
     {
-
-    $user = auth()->user();
-
-    return response()->json(['user' => $user], 200);
-
+        $user = auth()->user();
+        return response()->json(['user' => $user], 200);
     }
 }
