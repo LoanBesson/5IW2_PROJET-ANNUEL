@@ -21,6 +21,15 @@ use App\Http\Controllers\PassportAuthController;
 Route::post('register', [PassportAuthController::class, 'register']);
 Route::post('login', [PassportAuthController::class, 'login']);
 
+// La page où on présente les liens de redirection vers les providers
+Route::get("login-register", "SocialiteController@loginRegister");
+
+// La redirection vers le provider
+Route::get("redirect/{provider}", "SocialiteController@redirect")->name('socialite.redirect');
+
+// Le callback du provider
+Route::get("callback/{provider}", "SocialiteController@callback")->name('socialite.callback');
+
 Route::middleware('auth:api')->group(function () {
     Route::get('get-user', [PassportAuthController::class, 'userInfo']);
     Route::resource('property', PropertyController::class)->except(['create', 'edit']);
