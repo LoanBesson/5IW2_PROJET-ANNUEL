@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { TokenStorageService } from '../../services/token.service';
 
 @Component({
   selector: 'navbar',
@@ -6,10 +7,15 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./navbar.component.css']
 })
 export class NavbarComponent implements OnInit {
-
-  constructor() { }
+  
+  @Input() isLoggedIn: any;
+  constructor(private tokenStorageService: TokenStorageService) { }
 
   ngOnInit(): void {
   }
 
+  logout(): void {
+    this.tokenStorageService.signOut();
+    window.location.reload();
+  }
 }

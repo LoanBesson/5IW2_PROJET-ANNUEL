@@ -8,14 +8,17 @@ import { UsersService } from 'src/app/shared/services/users.service';
 })
 export class HomeComponent implements OnInit {
 
-  constructor(private usersService : UsersService) { }
-
+  content?: string;
+  constructor(private usersService: UsersService) { }
   ngOnInit(): void {
     this.usersService.getUser().subscribe({
-      next: (data) => console.log(data),
-      error: (error) => console.error(error),
-      complete: () => console.info('complete')
+      next: (data) => {
+        this.content = data
+        console.log(this.content);
+        
+      },
+      error: (error) => console.log(error),
+      complete: () => console.log('complete')
     })
   }
-
 }

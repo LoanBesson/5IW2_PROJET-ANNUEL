@@ -12,6 +12,7 @@ import { HomeComponent } from './components/home/home.component';
 import { Page404Component } from './shared/components/page404/page404.component';
 import { RequestInterceptor } from './shared/interceptors/request.interceptor';
 import { ProfilComponent } from './components/profil/profil.component';
+import { LogOutComponent } from './components/log-out/log-out.component';
 
 
 @NgModule({
@@ -22,7 +23,8 @@ import { ProfilComponent } from './components/profil/profil.component';
     LoginComponent,
     HomeComponent,
     Page404Component,
-    ProfilComponent
+    ProfilComponent,
+    LogOutComponent
   ],
   imports: [
 		BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),

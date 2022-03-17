@@ -11,6 +11,9 @@ import { FormBuilder } from '@angular/forms';
 export class RegisterComponent implements OnInit {
 
   registerForm;
+  isSuccessful = false;
+  isSignUpFailed = false;
+  errorMessage = '';
 
   constructor(private authService: AuthService, private formBuilder: FormBuilder) {
     this.registerForm = this.formBuilder.group({
@@ -27,8 +30,16 @@ export class RegisterComponent implements OnInit {
   register(): void {
     this.authService.register(this.registerForm.value)
       .subscribe({
-        next: (data) => console.log(data.token),
-        error: (error) => console.error(error),
+        next: (data) => {
+          console.log(data);
+          this.isSuccessful = true;
+          this.isSignUpFailed = false;
+        },
+        error: (error) => {
+          console.error(error);
+          this.errorMessage = error.error.message;
+          this.isSignUpFailed = true;
+        },
         complete: () => console.info('complete')
       })
   }
