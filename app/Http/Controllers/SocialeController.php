@@ -1,75 +1,91 @@
 <?php
 
 namespace App\Http\Controllers;
-use Illuminate\Http\Request;
 
-use Socialite;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Hash;
+use GuzzleHttp\Exception\ClientException;
+use Illuminate\Http\JsonResponse;
+use Laravel\Socialite\Facades\Socialite;
 
 use App\User;
+
+
 
 class SocialeController extends Controller
 {
 
-    protected $providers = [ "google", "github", "facebook" ];
-
-
-    public function loginRegister () {
-    	return view("socialite.login-register");
-    }
-
-
-    public function redirect (Request $request) {
-
-        $provider = $request->provider;
-
-
-        if (in_array($provider, $this->providers)) {
-            return Socialite::driver($provider)->redirect();
+    /**
+     * Redirect the user to the Provider authentication page.
+     *
+     * @param $provider
+     * @return JsonResponse
+     */
+    public function redirectToProvider($provider)
+    {
+        $validated = $this->validateProvider($provider);
+        if (!is_null($validated)) {
+            return $validated;
         }
-        abort(404);
+
+        return Socialite::driver($provider)->stateless()->redirect();
     }
 
-    public function callback (Request $request) {
+    /**
+     * Obtain the user information from Provider.
+     *
+     * @param $provider
+     * @return JsonResponse
+     */
+    public function handleProviderCallback($provider)
+    {
+        $validated = $this->validateProvider($provider);
+        if (!is_null($validated)) {
+            return $validated;
+        }
 
-        $provider = $request->provider;
+        try {
+            $user = Socialite::driver($provider)->stateless()->user();
+        } catch (ClientException $exception) {
+            return response()->json(['error' => 'Invalid credentials provided.'], 422);
+        }
 
-        if (in_array($provider, $this->providers)) {
+        $userCreated = User::firstOrCreate(
+            [
+                'email' => $user->getEmail()
+            ],
+            [
+                'email_verified_at' => now(),
+                'name' => $user->getName(),
+                'sociale_id'=> $user->id,
+                'status' => true,
+            ]
+        );
+        $userCreated->providers()->updateOrCreate(
+            [
+                'provider' => $provider,
+                'provider_id' => $user->getId(),
+            ],
+            [
+                'avatar' => $user->getAvatar()
+            ]
+        );
+        $token = $userCreated->createToken('token-name')->plainTextToken;
 
-
-            $data = Socialite::driver($request->provider)->user();
-
-
-            $email = $data->getEmail();
-            $name = $data->getName();
-
-
-            $user = User::where('sociale_id', $user->id)->first();
-
-
-            if (isset($user)) {
-
-
-                $user->name = $name;
-                $user->save();
-
-
-            } else {
-
-
-                $user = User::create([
-                    'name' => $name,
-                    'email' => $email,
-                    'sociale_id'=> $user->id,
-                    'password' => bcrypt("emilie")
-                ]);
-            }
-
-            # 4. On connecte l'utilisateur
-            auth()->login($user);
-
-            # 5. On redirige l'utilisateur vers /home
-            if (auth()->check()) return redirect(route('home'));
-
-         }
-         abort(404);
+        return response()->json($userCreated, 200, ['Access-Token' => $token]);
     }
+
+    /**
+     * @param $provider
+     * @return JsonResponse
+     */
+    protected function validateProvider($provider)
+    {
+        if (!in_array($provider, ['facebook', 'google'])) {
+            return response()->json(['error' => 'Please login using facebook or google'], 422);
+        }
+    }
+
+}
+

@@ -6,6 +6,7 @@ use App\Http\Controllers\ContactController;
 use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\PassportAuthController;
+use App\Http\Controllers\SocialeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,14 +22,12 @@ use App\Http\Controllers\PassportAuthController;
 Route::post('register', [PassportAuthController::class, 'register']);
 Route::post('login', [PassportAuthController::class, 'login']);
 
-// La page où on présente les liens de redirection vers les providers
-Route::get("login-register", "SocialiteController@loginRegister");
 
 // La redirection vers le provider
-Route::get("redirect/{provider}", "SocialiteController@redirect")->name('socialite.redirect');
+Route::get('/login/{provider}', [SocialeController::class,'redirectToProvider']);
 
 // Le callback du provider
-Route::get("callback/{provider}", "SocialiteController@callback")->name('socialite.callback');
+Route::get('/login/{provider}/callback', [SocialeController::class,'handleProviderCallback']);
 
 Route::middleware('auth:api')->group(function () {
     Route::get('get-user', [PassportAuthController::class, 'userInfo']);
@@ -36,5 +35,7 @@ Route::middleware('auth:api')->group(function () {
     Route::resource('contact', ContactController::class)->except(['create', 'edit']);
     Route::resource('favorite', FavoriteController::class)->except(['create', 'edit']);
     Route::resource('search', SearchController::class)->except(['create', 'edit']);
+
+
 });
 

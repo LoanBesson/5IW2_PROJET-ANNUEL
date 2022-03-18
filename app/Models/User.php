@@ -20,7 +20,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'role'
+        'role',
+        'sociale_id'
     ];
 
     /**
@@ -45,5 +46,10 @@ class User extends Authenticatable
     public function properties()
     {
         return $this->hasMany(Property::class);
+    }
+
+    public function providers()
+    {
+        return $this->hasMany(Provider::class,'user_id','id');
     }
 }
