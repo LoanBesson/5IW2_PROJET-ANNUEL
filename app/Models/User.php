@@ -6,8 +6,10 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Passport\HasApiTokens;
+use Tymon\JWTAuth\Contracts\JWTSubject;
 
-class User extends Authenticatable
+
+class User extends Authenticatable implements JWTSubject
 {
     use HasApiTokens, HasFactory, Notifiable;
 
@@ -51,5 +53,32 @@ class User extends Authenticatable
     public function providers()
     {
         return $this->hasMany(Provider::class,'user_id','id');
+    }
+
+    /**
+     * Get the identifier that will be stored in the subject claim of the JWT.
+     *
+     * @return mixed
+     */
+    public function getJWTIdentifier()
+    {
+        return $this->getKey();
+    }
+
+    /**
+     * Return a key value array, containing any custom claims to be added to the JWT.
+     *
+     * @return array
+     */
+    public function getJWTCustomClaims()
+    {
+        return [
+            'id'              => $this->id,
+            'name'      => $this->name,
+            'email'           => $this->email,
+            'created_at'   => $this->created_at->toIso8601String(),
+            'updated_at' => $this->updated_at->toIso8601String(),
+            'role' => $this->role
+        ];
     }
 }
