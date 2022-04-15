@@ -34,9 +34,9 @@ Route::get('/login/{provider}', [SocialeController::class,'redirectToProvider'])
 
 // Le callback du provider
 Route::get('/login/{provider}/callback', [SocialeController::class,'handleProviderCallback']);
+Route::resource('property', PropertyController::class)->except(['create', 'edit']);
 
 Route::middleware('auth:api')->group(function () {
-    Route::resource('property', PropertyController::class)->except(['create', 'edit']);
     Route::resource('contact', ContactController::class)->except(['create', 'edit']);
     Route::resource('favorite', FavoriteController::class)->except(['create', 'edit']);
     Route::resource('search', SearchController::class)->except(['create', 'edit']);
