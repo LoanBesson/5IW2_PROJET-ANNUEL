@@ -9,6 +9,7 @@ use App\Http\Controllers\ContactController;
 use App\Http\Controllers\SocialeController;
 use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\PropertyController;
+use App\Http\Controllers\NewPasswordController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -30,6 +31,8 @@ Route::group([
     Route::get('/user-profile', [AuthController::class, 'userProfile']);
     Route::post('/email/verification-notification', [EmailVerificationController::class, 'sendVerificationEmail']);
     Route::get('/verify-email/{id}/{hash}', [EmailVerificationController::class, 'verify'])->name('verification.verify');
+    Route::post('/forgot-password', [NewPasswordController::class, 'forgotPassword']);
+    Route::post('/reset-password', [NewPasswordController::class, 'reset']);
 
 });
 
