@@ -3,6 +3,8 @@
 namespace App\Providers;
 
 use Laravel\Passport\Passport;
+use Illuminate\Auth\Notifications\VerifyEmail;
+use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
@@ -27,5 +29,14 @@ class AuthServiceProvider extends ServiceProvider
         $this->registerPolicies();
 
         Passport::routes();
+
+        VerifyEmail::toMailUsing(function ($notifiable, $url) {
+            $spaUrl = $url;
+
+            return (new MailMessage)
+                ->subject('Mail de verification')
+                ->line('Cliquer sur le lien pour activer votre compte.')
+                ->action('Verify Email Address', $spaUrl);
+        });
     }
 }

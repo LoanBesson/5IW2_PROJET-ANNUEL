@@ -11,6 +11,9 @@
     sail artisan db:seed && \
     sail artisan passport:install
 
+### Meilisearch
+sail artisan scout:import "App\Models\Property"
+
 #### En cas de problème de token
     sail artisan passport:keys --force && \
     sail artisan passport:install --force
