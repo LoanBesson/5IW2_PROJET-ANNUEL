@@ -11,6 +11,10 @@
     sail artisan db:seed && \
     sail artisan passport:install
 
+### Mailhog
+brew install mailhog
+brew services start mailhog
+
 ### Meilisearch
 sail artisan scout:import "App\Models\Property"
 
