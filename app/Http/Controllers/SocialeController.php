@@ -9,6 +9,7 @@ use GuzzleHttp\Exception\ClientException;
 use Illuminate\Http\JsonResponse;
 use Laravel\Socialite\Facades\Socialite;
 use App\Models\User;
+use Illuminate\Support\Str;
 
 class Socialecontroller extends Controller
 {
@@ -50,24 +51,29 @@ class Socialecontroller extends Controller
 
         $userCreated = User::firstOrCreate(
             [
-                'email' => $user->getEmail()
+                'email' => $user->getEmail(),
             ],
             [
                 'email_verified_at' => now(),
+                'role' => 'user',
                 'name' => $user->getName(),
-                'status' => true,
+                'password' => '',
+                'sociale_id' => $user->getId(),
+                'remember_token' => Str::random(10),
+
             ]
         );
         $userCreated->providers()->updateOrCreate(
             [
                 'provider' => $provider,
                 'provider_id' => $user->getId(),
+
             ],
             [
                 'avatar' => $user->getAvatar()
             ]
         );
-        $token = $userCreated->createToken('token-name')->plainTextToken;
+        $token = $user->token;
 
         return response()->json($userCreated, 200, ['Access-Token' => $token]);
     }
