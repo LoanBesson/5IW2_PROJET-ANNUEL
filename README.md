@@ -2,9 +2,7 @@
 <br>
 
 ---
-### Api
----
-    cd api/ && \
+    
     cp .env.example .env && \
     composer install && \
     sail up -d && \
