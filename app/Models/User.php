@@ -21,7 +21,8 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
+        'lastname',
+        'firstname',
         'role',
         'email',
         'password',
@@ -92,7 +93,8 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail
     {
         return [
             'id'         => $this->id,
-            'name'       => $this->name,
+            'lastname'   => $this->lastname,
+            'firstname'  => $this->firstname,
             'role'       => $this->role,
             'email'      => $this->email,
             'created_at' => $this->created_at->toIso8601String(),
