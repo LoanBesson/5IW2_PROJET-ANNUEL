@@ -34,6 +34,7 @@ Route::group([
     Route::post('/forgot-password', [NewPasswordController::class, 'forgotPassword']);
     Route::post('/reset-password', [NewPasswordController::class, 'reset']);
 
+    Route::resource('users', 'UserController', ['except' => ['create', 'edit']])->middleware('can:isAdmin');
 });
 
 // La redirection vers le provider
@@ -41,10 +42,10 @@ Route::get('/login/{provider}', [SocialeController::class,'redirectToProvider'])
 
 // Le callback du provider
 Route::get('/login/{provider}/callback', [SocialeController::class,'handleProviderCallback']);
-Route::resource('property', PropertyController::class)->except(['create', 'edit']);
+Route::resource('property', PropertyController::class, ['except' => ['create', 'edit']]);
 
 Route::middleware('auth:api')->group(function () {
-    Route::resource('contact', ContactController::class)->except(['create', 'edit']);
-    Route::resource('favorite', FavoriteController::class)->except(['create', 'edit']);
-    Route::resource('search', SearchController::class)->except(['create', 'edit']);
+    Route::resource('contact', ContactController::class, ['except' => ['create', 'edit']]);
+    Route::resource('favorite', FavoriteController::class, ['except' => ['create', 'edit']]);
+    Route::resource('search', SearchController::class, ['except' => ['create', 'edit']]);
 });
