@@ -10,6 +10,7 @@
     sail artisan migrate && \
     sail artisan db:seed && \
     sail artisan passport:install
+    sail artisan jwt:secret
 
 ### Mailhog
 brew install mailhog
