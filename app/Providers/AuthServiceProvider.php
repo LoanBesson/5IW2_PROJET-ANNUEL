@@ -38,5 +38,9 @@ class AuthServiceProvider extends ServiceProvider
                 ->line('Cliquer sur le lien pour activer votre compte.')
                 ->action('Verify Email Address', $spaUrl);
         });
+
+        Gate::define('isAdmin', function ($user) {
+            return $user->isAdmin();
+        });
     }
 }

@@ -21,11 +21,12 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
+        'lastname',
+        'firstname',
+        'role',
         'email',
         'password',
-        'role',
-        'sociale_id'
+        'sociale_id',
     ];
 
     /**
@@ -49,21 +50,28 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail
 
     public function sendPasswordResetNotification($token)
     {
-
         $url = 'http://localhost/api/auth/reset-password?token=' . $token;
-
         $this->notify(new ResetPasswordNotification($url));
     }
 
-
+    /**
+     * Get the user properties.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function properties()
     {
         return $this->hasMany(Property::class);
     }
 
+    /**
+     * Get user providers.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function providers()
     {
-        return $this->hasMany(Provider::class,'user_id','id');
+        return $this->hasMany(Provider::class, 'user_id', 'id');
     }
 
     /**
@@ -84,12 +92,23 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail
     public function getJWTCustomClaims()
     {
         return [
-            'id'              => $this->id,
-            'name'      => $this->name,
-            'email'           => $this->email,
-            'created_at'   => $this->created_at->toIso8601String(),
+            'id'         => $this->id,
+            'lastname'   => $this->lastname,
+            'firstname'  => $this->firstname,
+            'role'       => $this->role,
+            'email'      => $this->email,
+            'created_at' => $this->created_at->toIso8601String(),
             'updated_at' => $this->updated_at->toIso8601String(),
-            'role' => $this->role
         ];
+    }
+
+    /**
+     * Return true if the user is an admin
+     *
+     * @return bool
+     */
+    public function isAdmin()
+    {
+        return $this->role === 'admin';
     }
 }
