@@ -8,6 +8,7 @@ use App\Http\Controllers\SearchController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\SocialeController;
 use App\Http\Controllers\FavoriteController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\PropertyController;
 use App\Http\Controllers\NewPasswordController;
 /*
@@ -33,8 +34,7 @@ Route::group([
     Route::get('/verify-email/{id}/{hash}', [EmailVerificationController::class, 'verify'])->name('verification.verify');
     Route::post('/forgot-password', [NewPasswordController::class, 'forgotPassword']);
     Route::post('/reset-password', [NewPasswordController::class, 'reset']);
-
-    Route::resource('users', 'UserController', ['except' => ['create', 'edit']])->middleware('can:isAdmin');
+    Route::resource('users', UserController::class, ['except' => ['create', 'edit']])->middleware('can:isAdmin');
 });
 
 // La redirection vers le provider
