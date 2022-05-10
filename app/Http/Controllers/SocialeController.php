@@ -55,8 +55,8 @@ class Socialecontroller extends Controller
             ],
             [
                 'email_verified_at' => now(),
-                'role' => 'user',
                 'name' => $user->getName(),
+                'role' => 'user',
                 'password' => '',
                 'sociale_id' => $user->getId(),
                 'remember_token' => Str::random(10),
