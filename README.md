@@ -10,10 +10,12 @@
     sail artisan migrate && \
     sail artisan db:seed && \
     sail artisan passport:install
+    sail artisan jwt:secret
 
 ### Mailhog
 brew install mailhog
 brew services start mailhog
+brew services stop mailhog
 
 ### Meilisearch
 sail artisan scout:import "App\Models\Property"

@@ -54,12 +54,14 @@ class Socialecontroller extends Controller
                 'email' => $user->getEmail(),
             ],
             [
+                'sociale_id' => $user->getId(),
+                'lastname' => $user->user['family_name'],
+                'firstname' => $user->user['given_name'],
                 'email_verified_at' => now(),
                 'role' => 'user',
-                'name' => $user->getName(),
                 'password' => '',
-                'sociale_id' => $user->getId(),
-                'remember_token' => Str::random(10),
+                'remember_token' => '',
+
 
             ]
         );
@@ -67,6 +69,7 @@ class Socialecontroller extends Controller
             [
                 'provider' => $provider,
                 'provider_id' => $user->getId(),
+
 
             ],
             [
