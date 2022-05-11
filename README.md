@@ -15,6 +15,7 @@
 ### Mailhog
 brew install mailhog
 brew services start mailhog
+brew services stop mailhog
 
 ### Meilisearch
 sail artisan scout:import "App\Models\Property"
