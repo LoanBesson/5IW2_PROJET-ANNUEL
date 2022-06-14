@@ -14,8 +14,8 @@ return new class extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->renameColumn('name', 'lastname');
-            $table->string('firstname')->default('');
+            $table->renameColumn('name', 'lastname')->nullable();
+            $table->string('firstname')->nullable();
             $table->string('profile_picture_path')->nullable();
         });
     }
