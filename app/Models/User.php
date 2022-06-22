@@ -25,6 +25,7 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail
         'firstname',
         'role',
         'email',
+        'phone_number',
         'password',
         'sociale_id',
     ];
@@ -92,13 +93,14 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail
     public function getJWTCustomClaims()
     {
         return [
-            'id'         => $this->id,
-            'lastname'   => $this->lastname,
-            'firstname'  => $this->firstname,
-            'role'       => $this->role,
-            'email'      => $this->email,
-            'created_at' => $this->created_at->toIso8601String(),
-            'updated_at' => $this->updated_at->toIso8601String(),
+            'id'           => $this->id,
+            'lastname'     => $this->lastname,
+            'firstname'    => $this->firstname,
+            'role'         => $this->role,
+            'email'        => $this->email,
+            'phone_number' => $this->phone_number,
+            'created_at'   => $this->created_at->toIso8601String(),
+            'updated_at'   => $this->updated_at->toIso8601String(),
         ];
     }
 
