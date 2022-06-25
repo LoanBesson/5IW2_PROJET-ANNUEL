@@ -2,10 +2,13 @@
 
 namespace App\Providers;
 
+use App\Models\User;
+use App\Models\Property;
 use Laravel\Passport\Passport;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Notifications\Messages\MailMessage;
-use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
 class AuthServiceProvider extends ServiceProvider
@@ -16,7 +19,7 @@ class AuthServiceProvider extends ServiceProvider
      * @var array<class-string, class-string>
      */
     protected $policies = [
-        // 'App\Models\Model' => 'App\Policies\ModelPolicy',
+        'App\Models\Contact' => 'App\Policies\ContactPolicy',
     ];
 
     /**
@@ -39,8 +42,16 @@ class AuthServiceProvider extends ServiceProvider
                 ->action('Verify Email Address', $spaUrl);
         });
 
-        Gate::define('isAdmin', function ($user) {
+        Gate::define('isAdmin', function (User $user) {
             return $user->isAdmin();
+        });
+
+        Gate::define('create-contact', function (User $user, $property_id) {
+            $property = Property::find($property_id);
+            if ($property) {
+                return $user->id != $property->user_id;
+            }
+            return false;
         });
     }
 }

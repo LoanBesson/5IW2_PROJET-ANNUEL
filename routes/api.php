@@ -43,10 +43,10 @@ Route::get('/login/{provider}', [SocialeController::class,'redirectToProvider'])
 Route::get('/login/{provider}/callback', [SocialeController::class,'handleProviderCallback']);
 
 Route::middleware('auth:api', 'verified')->group(function () {
-    Route::resource('contact', ContactController::class, ['except' => ['create', 'edit']]);
-    Route::resource('favorite', FavoriteController::class, ['except' => ['create', 'edit']]);
-    Route::resource('search', SearchController::class, ['except' => ['create', 'edit']]);
-    Route::resource('property', PropertyController::class, ['except' => ['create', 'edit']]);
+    Route::resource('contacts', ContactController::class, ['except' => ['create', 'edit']]);
+    Route::resource('favorites', FavoriteController::class, ['except' => ['create', 'edit']]);
+    Route::resource('searches', SearchController::class, ['except' => ['create', 'edit']]);
+    Route::resource('properties', PropertyController::class, ['except' => ['create', 'edit']]);
     Route::resource('users', UserController::class)->middleware('can:isAdmin');
     Route::get('/users/{user}/properties', [UserController::class, 'getProperties']);
     Route::get('/users/{user}/favorites', [UserController::class, 'getFavorites']);

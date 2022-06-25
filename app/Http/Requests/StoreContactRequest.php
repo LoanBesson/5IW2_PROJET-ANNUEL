@@ -24,8 +24,10 @@ class StoreContactRequest extends FormRequest
     public function rules()
     {
         return [
-            //
-            'user_id' => 'required|exists:users,id',
+            'prospect_id'  => 'required|exists:users,id',
+            'property_id'  => 'required|exists:properties,id',
+            'desired_date' => 'required|date',
+            'status'       => 'required|string',
         ];
     }
 }

@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Contact;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
+use App\Http\Resources\ContactResource;
 use App\Http\Requests\StoreContactRequest;
 use App\Http\Requests\UpdateContactRequest;
-use App\Http\Resources\ContactResource;
-use App\Models\Contact;
 
 class ContactController extends Controller
 {
@@ -28,6 +30,9 @@ class ContactController extends Controller
      */
     public function store(StoreContactRequest $request)
     {
+        if (Gate::denies('create-contact', ['property_id' => $request->property_id]))
+            return response()->json(['error' => 'You are not authorized to create a contact for this property.'], 403);
+
         $contact = Contact::create($request->all());
 
         return response()->json([
