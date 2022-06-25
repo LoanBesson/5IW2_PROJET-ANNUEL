@@ -25,6 +25,7 @@ class StoreContactRequest extends FormRequest
     {
         return [
             //
+            'user_id' => 'required|exists:users,id',
         ];
     }
 }

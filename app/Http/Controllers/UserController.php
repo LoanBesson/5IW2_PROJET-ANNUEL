@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreUserRequest;
-use App\Http\Requests\UpdateUserRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Resources\UserResource;
+use App\Http\Requests\StoreUserRequest;
+use App\Http\Requests\UpdateUserRequest;
+use App\Http\Resources\FavoriteResource;
+use App\Http\Resources\PropertyResource;
 
 class UserController extends Controller
 {
@@ -78,5 +80,25 @@ class UserController extends Controller
         return response()->json([
             'message' => 'Successfully deleted!'
         ], 200);
+    }
+
+    /**
+     * Get the user properties.
+     * @param  User  $user
+     * @return PropertyResource
+     */
+    public function getProperties(User $user)
+    {
+        return PropertyResource::collection($user->properties);
+    }
+
+    /**
+     * Get the user favorites.
+     * @param  User  $user
+     * @return FavoriteResource
+     */
+    public function getFavorites(User $user)
+    {
+        return FavoriteResource::collection($user->favorites);
     }
 }

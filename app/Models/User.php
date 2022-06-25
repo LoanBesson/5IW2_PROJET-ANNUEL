@@ -66,6 +66,16 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail
     }
 
     /**
+     * Get the user favorites.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function favorites()
+    {
+        return $this->hasMany(Favorite::class);
+    }
+
+    /**
      * Get user providers.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany

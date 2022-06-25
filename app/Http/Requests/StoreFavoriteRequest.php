@@ -24,7 +24,8 @@ class StoreFavoriteRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            "user_id" => "required|exists:users,id",
+            "property_id" => "required|exists:properties,id",
         ];
     }
 }

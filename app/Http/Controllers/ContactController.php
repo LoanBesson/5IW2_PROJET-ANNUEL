@@ -31,7 +31,7 @@ class ContactController extends Controller
         $contact = Contact::create($request->all());
 
         return response()->json([
-            'message' => 'Successfully registered!',
+            'message' => 'Contact added successfully!',
             'data' => new ContactResource($contact)
         ], 201);
     }

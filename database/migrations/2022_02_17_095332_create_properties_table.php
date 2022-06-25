@@ -50,7 +50,7 @@ return new class extends Migration
             $table->float('fees_price');
             $table->float('inventory_price');
             $table->boolean('published');
-            $table->string('image_path');
+            $table->string('image_path')->nullable();
             $table->date('construction_date');
             $table->timestamps();
         });
