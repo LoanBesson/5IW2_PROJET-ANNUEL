@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Models\User;
+use App\Models\Contact;
 use App\Models\Property;
 use Laravel\Passport\Passport;
 use Illuminate\Support\Facades\Auth;
@@ -19,7 +20,7 @@ class AuthServiceProvider extends ServiceProvider
      * @var array<class-string, class-string>
      */
     protected $policies = [
-        'App\Models\Contact' => 'App\Policies\ContactPolicy',
+        // 'App\Model' => 'App\Policies\ModelPolicy',
     ];
 
     /**
@@ -49,9 +50,13 @@ class AuthServiceProvider extends ServiceProvider
         Gate::define('create-contact', function (User $user, $property_id) {
             $property = Property::find($property_id);
             if ($property) {
-                return $user->id != $property->user_id;
+                return $user->id !== $property->user_id;
             }
             return false;
+        });
+
+        Gate::define('view-contact', function (User $user, Contact $contact) {
+            return $user->isAdmin() || $user->id === $contact->prospect_id;
         });
     }
 }

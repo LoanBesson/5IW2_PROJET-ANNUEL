@@ -30,7 +30,7 @@ class ContactController extends Controller
      */
     public function store(StoreContactRequest $request)
     {
-        if (Gate::denies('create-contact', ['property_id' => $request->property_id]))
+        if (Gate::denies('create-contact', $request->property_id))
             return response()->json(['error' => 'You are not authorized to create a contact for this property.'], 403);
 
         $contact = Contact::create($request->all());
@@ -49,6 +49,9 @@ class ContactController extends Controller
      */
     public function show(Contact $contact)
     {
+        if (Gate::denies('view-contact', $contact))
+            return response()->json(['error' => 'You are not authorized to view this contact.'], 403);
+
         return new ContactResource($contact);
     }
 
