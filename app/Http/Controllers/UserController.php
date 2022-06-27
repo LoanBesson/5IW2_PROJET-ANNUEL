@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Resources\UserResource;
 use App\Http\Requests\StoreUserRequest;
+use App\Http\Resources\ContactResource;
 use App\Http\Requests\UpdateUserRequest;
 use App\Http\Resources\FavoriteResource;
 use App\Http\Resources\PropertyResource;
@@ -83,13 +84,13 @@ class UserController extends Controller
     }
 
     /**
-     * Get the user properties.
+     * Get the user contacts.
      * @param  User  $user
-     * @return PropertyResource
+     * @return ContactResource
      */
-    public function getProperties(User $user)
+    public function getContacts(User $user)
     {
-        return PropertyResource::collection($user->properties);
+        return ContactResource::collection($user->contacts);
     }
 
     /**
@@ -100,5 +101,15 @@ class UserController extends Controller
     public function getFavorites(User $user)
     {
         return FavoriteResource::collection($user->favorites);
+    }
+
+    /**
+     * Get the user properties.
+     * @param  User  $user
+     * @return PropertyResource
+     */
+    public function getProperties(User $user)
+    {
+        return PropertyResource::collection($user->properties);
     }
 }

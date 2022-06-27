@@ -56,13 +56,13 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail
     }
 
     /**
-     * Get the user properties.
+     * Get the user contacts.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function properties()
+    public function contacts()
     {
-        return $this->hasMany(Property::class);
+        return $this->hasMany(Contact::class, 'prospect_id');
     }
 
     /**
@@ -73,6 +73,16 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail
     public function favorites()
     {
         return $this->hasMany(Favorite::class);
+    }
+
+    /**
+     * Get the user properties.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function properties()
+    {
+        return $this->hasMany(Property::class);
     }
 
     /**

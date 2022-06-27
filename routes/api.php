@@ -48,6 +48,7 @@ Route::middleware('auth:api', 'verified')->group(function () {
     Route::resource('searches', SearchController::class, ['except' => ['create', 'edit']]);
     Route::resource('properties', PropertyController::class, ['except' => ['create', 'edit']]);
     Route::resource('users', UserController::class)->middleware('can:isAdmin');
-    Route::get('/users/{user}/properties', [UserController::class, 'getProperties']);
+    Route::get('/users/{user}/contacts', [UserController::class, 'getContacts']);
     Route::get('/users/{user}/favorites', [UserController::class, 'getFavorites']);
+    Route::get('/users/{user}/properties', [UserController::class, 'getProperties']);
 });
