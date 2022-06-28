@@ -42,9 +42,10 @@ class ResetPasswordNotification extends Notification
      */
     public function toMail($notifiable)
     {
+        $spaUrl = "http://localhost:4200/reset-password//?url=$this->url&email=$notifiable->email";
         return (new MailMessage)
                     ->line('Mot de passe oublié')
-                    ->action('Cliquez pour réinitialiser', $this->url)
+                    ->action('Cliquez pour réinitialiser', $spaUrl)
                     ->line('Merci d\'utiliser notre application !');
     }
 

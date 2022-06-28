@@ -57,7 +57,7 @@ class NewPasswordController extends Controller
 
         if ($status == Password::PASSWORD_RESET) {
             return response([
-                'message'=> 'Réinitialisation du mot de passe avec succès'
+                'message'=> 'Mot de passe réinitialisé avec succès'
             ]);
         }
 
