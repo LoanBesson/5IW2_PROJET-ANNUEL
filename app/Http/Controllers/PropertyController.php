@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StorePropertyRequest;
 use App\Http\Requests\UpdatePropertyRequest;
 use App\Http\Resources\PropertyResource;
+use Illuminate\Http\Request;
 use App\Models\Property;
 
 class PropertyController extends Controller
@@ -25,10 +26,23 @@ class PropertyController extends Controller
      * @param  \App\Http\Requests\StorePropertyRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StorePropertyRequest $request)
+    public function store(Request $request)
     {
         $property = Property::create($request->all());
 
+        if($request->hasFile('image_path')) {
+            $completeFileName = $request->file('image_path')->getClientOriginalName();
+            $fileName = pathinfo($completeFileName, PATHINFO_FILENAME);
+            $extension = $request->file('image_path')->getClientOriginalExtension();
+            $fileNameToStore = str_replace(' ', '_', $fileName) . '_' . time() . '.' . $extension;
+            $path = $request->file('image_path')->storeAs('public/images', $fileNameToStore);
+            $property->image_path = $fileNameToStore;
+            if($property->save()) {
+                return response()->json(['success' => true, 'message' => 'File uploaded successfully.']);
+            } else {
+                return response()->json(['success' => false, 'message' => 'File upload failed.']);
+            }
+        }
         return response()->json([
             'message' => 'Successfully registered!',
             'data' => new PropertyResource($property)
