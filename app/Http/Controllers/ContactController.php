@@ -76,7 +76,7 @@ class ContactController extends Controller
         $contact->update($request->all());
 
         return response()->json([
-            'message' => 'Successfully updated!',
+            'message' => 'Contact updated successfully!',
             'data' => new ContactResource($contact)
         ], 201);
     }

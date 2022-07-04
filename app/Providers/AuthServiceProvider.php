@@ -63,5 +63,9 @@ class AuthServiceProvider extends ServiceProvider
         Gate::define('access-favorite', function (User $user, Favorite $favorite) {
             return $user->isAdmin() || $user->id === $favorite->user_id;
         });
+
+        Gate::define('access-property', function (User $user, Property $property) {
+            return $user->isAdmin() || $user->id === $property->user_id;
+        });
     }
 }

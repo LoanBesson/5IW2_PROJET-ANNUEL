@@ -27,13 +27,8 @@ class UpdatePropertyRequest extends FormRequest
         return [
             "title"                 => 'string|min:5|max:50',
             "description"           => 'string|min:5|max:255',
-            "type"                  => [
-                                        Rule::in(['appartment', 'house']),
-                                        ],
-            "category"              => [
-    
-                                        Rule::in(['T1', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'T8', 'T9']),
-                                        ],
+            "type"                  => 'in:appartment,house',
+            "category"              => 'in:T1,T2,T3,T4,T5,T6,T7,T8,T9',
             "area"                  => 'numeric|min:1',
             "floor"                 => 'integer|min:0',
             "floors"                => 'integer|min:1',
@@ -45,12 +40,8 @@ class UpdatePropertyRequest extends FormRequest
             "contains_storage"      => 'boolean',
             "is_kitchen_separated"  => 'boolean',
             "contains_dining_room"  => 'boolean',
-            "ground"                => [
-                                        Rule::in(['wood', 'rock']),
-                                        ],
-            "heater"                => [
-                                        Rule::in(['electrical', 'gas']),
-                                        ],
+            "ground"                => 'in:wood,rock',
+            "heater"                => 'in:electrical,gas',
             "fireplace"             => 'boolean',
             "elevator"              => 'boolean',
             "external_storage"      => 'boolean',
@@ -61,16 +52,13 @@ class UpdatePropertyRequest extends FormRequest
             "address"               => 'string',
             "zip_code"              => 'integer|min:1000|max:96000',
             "city"                  => 'string',
-            "rentOrSale"            => [
-                                        Rule::in(['rent', 'sale'])
-                                        ],
+            "rentOrSale"            => 'in:rent,sale',
             "price"                 => 'numeric|min:1',
             "charges"               => 'numeric|min:0',
             "guarentee"             => 'numeric|min:0',
             "fees_price"            => 'numeric|min:0',
             "inventory_price"       => 'numeric|min:0',
             "published"             => 'boolean',
-            "image_path"            => 'string',
             "construction_date"     => 'date|before:now'
         ];
     }

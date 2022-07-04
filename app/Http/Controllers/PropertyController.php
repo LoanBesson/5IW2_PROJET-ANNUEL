@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Property;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Storage;
+use App\Http\Resources\PropertyResource;
 use App\Http\Requests\StorePropertyRequest;
 use App\Http\Requests\UpdatePropertyRequest;
-use App\Http\Resources\PropertyResource;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
-use App\Models\Property;
 
 class PropertyController extends Controller
 {
@@ -32,29 +34,23 @@ class PropertyController extends Controller
      * @param  \App\Http\Requests\StorePropertyRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StorePropertyRequest $request)
     {
-        $property = Property::create($request->all());
+        $property = Auth::user()->properties()->create($request->all());
 
-        if($request->hasFile('image_path')) {
-            $completeFileName = $request->file('image_path')->getClientOriginalName();
-            $fileName = pathinfo($completeFileName, PATHINFO_FILENAME);
-            $extension = $request->file('image_path')->getClientOriginalExtension();
-            $fileNameToStore = str_replace(' ', '_', $fileName) . '_' . time() . '.' . $extension;
-            $path = $request->file('image_path')->storeAs('public/images', $fileNameToStore);
-            $property->image_path = $path;
-            if($property->save()) {
-                return response()->json([
-                    'message' => 'Successfully registered!',
-                    'data' => new PropertyResource($property)
-                ], 201);
-            } else {
-                return response()->json([
-                    'message' => 'Erreur!',
-                ], 400);
-            }
+        if ($request->hasFile('image')) {
+            $image = $request->file('image')->getClientOriginalName();
+            $extension = $request->file('image')->getClientOriginalExtension();
+            $fileNameToStore = str_replace(' ', '_', $image) . '_' . time() . '.' . $extension;
+
+            $property->image_path = $request->file('image')->storeAs('public/images', $fileNameToStore);
+            $property->save();
         }
-        
+
+        return response()->json([
+            'message' => 'Property added successfully!',
+            'data' => new PropertyResource($property)
+        ], 201);
     }
 
     /**
@@ -65,10 +61,11 @@ class PropertyController extends Controller
      */
     public function show(Property $property)
     {
-        $url = Storage::url($property->image_path);
         return response()->json([
-            'imgUrl' => $url,
-            'data' => new PropertyResource($property)
+            'data' => [
+                new PropertyResource($property),
+                'imgUrl' => Storage::url($property->image_path),
+                ]
         ], 201);
     }
 
@@ -81,10 +78,13 @@ class PropertyController extends Controller
      */
     public function update(UpdatePropertyRequest $request, Property $property)
     {
+        if (Gate::denies('access-property', $property))
+            return response()->json(['error' => 'You are not authorized to update this property.'], 403);
+
         $property->update($request->all());
 
         return response()->json([
-            'message' => 'Successfully updated!',
+            'message' => 'Property updated successfully!',
             'data' => new PropertyResource($property)
         ], 201);
     }
@@ -97,6 +97,9 @@ class PropertyController extends Controller
      */
     public function destroy(Property $property)
     {
+        if (Gate::denies('access-property', $property))
+            return response()->json(['error' => 'You are not authorized to delete this property.'], 403);
+
         $property->delete();
 
         return response('', 204);
