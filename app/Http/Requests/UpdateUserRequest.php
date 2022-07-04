@@ -27,7 +27,6 @@ class UpdateUserRequest extends FormRequest
             'lastname'     => 'string|min:2',
             'firstname'    => 'string|min:2',
             'role'         => 'in:admin,user',
-            'email'        => 'email|unique:users,email,'.$this->id,
             'phone_number' => 'string|min:10|max:10',
             'password'     => 'string|min:6',
             'sociale_id'   => '',
