@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Models\User;
 use App\Models\Contact;
+use App\Models\Favorite;
 use App\Models\Property;
 use Laravel\Passport\Passport;
 use Illuminate\Support\Facades\Auth;
@@ -55,8 +56,12 @@ class AuthServiceProvider extends ServiceProvider
             return false;
         });
 
-        Gate::define('view-contact', function (User $user, Contact $contact) {
+        Gate::define('access-contact', function (User $user, Contact $contact) {
             return $user->isAdmin() || $user->id === $contact->prospect_id;
+        });
+
+        Gate::define('access-favorite', function (User $user, Favorite $favorite) {
+            return $user->isAdmin() || $user->id === $favorite->user_id;
         });
     }
 }

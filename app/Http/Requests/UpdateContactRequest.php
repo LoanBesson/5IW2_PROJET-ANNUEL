@@ -24,7 +24,8 @@ class UpdateContactRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'desired_date' => 'sometimes|date',
+            'status'       => 'sometimes|string',
         ];
     }
 }

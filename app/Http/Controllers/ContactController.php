@@ -54,7 +54,7 @@ class ContactController extends Controller
      */
     public function show(Contact $contact)
     {
-        if (Gate::denies('view-contact', $contact))
+        if (Gate::denies('access-contact', $contact))
             return response()->json(['error' => 'You are not authorized to view this contact.'], 403);
 
         return new ContactResource($contact);
@@ -70,6 +70,9 @@ class ContactController extends Controller
      */
     public function update(UpdateContactRequest $request, Contact $contact)
     {
+        if (Gate::denies('access-contact', $contact))
+            return response()->json(['error' => 'You are not authorized to update this contact.'], 403);
+
         $contact->update($request->all());
 
         return response()->json([
@@ -86,6 +89,9 @@ class ContactController extends Controller
      */
     public function destroy(Contact $contact)
     {
+        if (Gate::denies('access-contact', $contact))
+            return response()->json(['error' => 'You are not authorized to destroy this contact.'], 403);
+
         $contact->delete();
 
         return response('', 204);

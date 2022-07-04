@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreFavoriteRequest;
-use App\Http\Requests\UpdateFavoriteRequest;
-use App\Http\Resources\FavoriteResource;
 use App\Models\Favorite;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
+use App\Http\Resources\FavoriteResource;
+use App\Http\Requests\StoreFavoriteRequest;
 
 class FavoriteController extends Controller
 {
@@ -33,10 +34,15 @@ class FavoriteController extends Controller
      */
     public function store(StoreFavoriteRequest $request)
     {
+        $favorite = Auth::user()->favorites->where('property_id', $request->property_id)->first();
+
+        if ($favorite)
+            return response()->json(['message' => 'You have already favorited this property'], 400);
+
         $favorite = Favorite::create($request->all());
 
         return response()->json([
-            'message' => 'Successfully registered!',
+            'message' => 'Favorite added successfully',
             'data' => new FavoriteResource($favorite)
         ], 201);
     }
@@ -49,25 +55,10 @@ class FavoriteController extends Controller
      */
     public function show(Favorite $favorite)
     {
+        if (Gate::denies('access-favorite', $favorite))
+            return response()->json(['error' => 'You are not authorized to view this favorite.'], 403);
+
         return new FavoriteResource($favorite);
-    }
-
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \App\Http\Requests\UpdateFavoriteRequest  $request
-     * @param  \App\Models\Favorite  $favorite
-     * @return \Illuminate\Http\Response
-     */
-    public function update(UpdateFavoriteRequest $request, Favorite $favorite)
-    {
-        $favorite->update($request->all());
-
-        return response()->json([
-            'message' => 'Successfully updated!',
-            'data' => new FavoriteResource($favorite)
-        ], 201);
     }
 
     /**
@@ -78,6 +69,9 @@ class FavoriteController extends Controller
      */
     public function destroy(Favorite $favorite)
     {
+        if (Gate::denies('access-favorite', $favorite))
+            return response()->json(['error' => 'You are not authorized to delete this favorite.'], 403);
+
         $favorite->delete();
 
         return response('', 204);
