@@ -23,6 +23,9 @@ class ContactController extends Controller
      */
     public function index()
     {
+        if (Gate::denies('isAdmin'))
+            return response()->json(['error' => 'You are not authorized to show all contacts.'], 403);
+
         return ContactResource::collection(Contact::all());
     }
 
@@ -38,7 +41,7 @@ class ContactController extends Controller
         if (Gate::denies('create-contact', $request->property_id))
             return response()->json(['error' => 'You are not authorized to create a contact for this property.'], 403);
 
-        $contact = Contact::create($request->all());
+        $contact = Auth::user()->contacts()->create($request->all());
 
         return response()->json([
             'message' => 'Contact added successfully!',
@@ -59,7 +62,6 @@ class ContactController extends Controller
 
         return new ContactResource($contact);
     }
-
 
     /**
      * Update the specified resource in storage.

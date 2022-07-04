@@ -22,7 +22,10 @@ class FavoriteController extends Controller
      */
     public function index()
     {
-        return FavoriteResource::collection(Favorite::all());
+        if (Gate::denies('isAdmin'))
+            return response()->json(['error' => 'You are not authorized to show all favorites.'], 403);
+
+        return FavoriteResource::collection(Auth::user()->favorites);
     }
 
 
@@ -39,7 +42,7 @@ class FavoriteController extends Controller
         if ($favorite)
             return response()->json(['message' => 'You have already favorited this property'], 400);
 
-        $favorite = Favorite::create($request->all());
+        $favorite = Auth::user()->favorites()->create($request->all());
 
         return response()->json([
             'message' => 'Favorite added successfully',

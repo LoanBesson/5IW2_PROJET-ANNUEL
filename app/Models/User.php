@@ -86,6 +86,16 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail
     }
 
     /**
+     * Get the user searches.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function searches()
+    {
+        return $this->hasMany(Search::class);
+    }
+
+    /**
      * Get user providers.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany

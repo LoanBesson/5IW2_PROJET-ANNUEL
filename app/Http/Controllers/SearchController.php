@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Search;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
+use App\Http\Resources\SearchResource;
 use App\Http\Requests\StoreSearchRequest;
 use App\Http\Requests\UpdateSearchRequest;
-use App\Http\Resources\SearchResource;
-use App\Models\Search;
 
 class SearchController extends Controller
 {
@@ -21,9 +23,11 @@ class SearchController extends Controller
      */
     public function index()
     {
+        if (Gate::denies('isAdmin'))
+            return response()->json(['error' => 'You are not authorized to show all searches.'], 403);
+
         return SearchResource::collection(Search::all());
     }
-
 
     /**
      * Store a newly created resource in storage.
@@ -33,10 +37,10 @@ class SearchController extends Controller
      */
     public function store(StoreSearchRequest $request)
     {
-        $search = Search::create($request->all());
+        $search = Auth::user()->searches()->create($request->all());
 
         return response()->json([
-            'message' => 'Successfully registered!',
+            'message' => 'Search added successfully!',
             'data' => new SearchResource($search)
         ], 201);
     }
@@ -49,6 +53,9 @@ class SearchController extends Controller
      */
     public function show(Search $search)
     {
+        if (Gate::denies('access-search', $search))
+            return response()->json(['error', 'You are not authorized to show this search.'], 403);
+
         return new SearchResource($search);
     }
 
@@ -61,10 +68,13 @@ class SearchController extends Controller
      */
     public function update(UpdateSearchRequest $request, Search $search)
     {
+        if (Gate::denies('access-search', $search))
+            return response()->json(['error', 'You are not authorized to update this search.'], 403);
+
         $search->update($request->all());
 
         return response()->json([
-            'message' => 'Successfully updated!',
+            'message' => 'Search updated successfully!',
             'data' => new SearchResource($search)
         ], 201);
     }
@@ -77,6 +87,9 @@ class SearchController extends Controller
      */
     public function destroy(Search $search)
     {
+        if (Gate::denies('access-search', $search))
+            return response()->json(['error', 'You are not authorized to delete this search.'], 403);
+
         $search->delete();
 
         return response('', 204);
