@@ -11,6 +11,11 @@ use App\Models\Property;
 
 class PropertyController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth:api')->except('index', 'show');
+    }
+
     /**
      * Display a listing of the resource.
      *
