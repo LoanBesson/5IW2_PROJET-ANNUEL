@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Resources\UserResource;
+use App\Http\Resources\SearchResource;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Resources\ContactResource;
 use App\Http\Requests\UpdateUserRequest;
@@ -15,7 +16,7 @@ class UserController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth:api');
+        $this->middleware(['auth:api', 'can:isAdmin']);
     }
 
     /**
@@ -120,5 +121,15 @@ class UserController extends Controller
     public function getProperties(User $user)
     {
         return PropertyResource::collection($user->properties);
+    }
+
+    /**
+     * Get the user searches.
+     * @param  User  $user
+     * @return SearchResource
+     */
+    public function getSearches(User $user)
+    {
+        return SearchResource::collection($user->searches);
     }
 }
