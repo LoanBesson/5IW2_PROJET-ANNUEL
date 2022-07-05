@@ -18,7 +18,7 @@ class UserController extends Controller
     public function __construct()
     {
         $this->middleware(['auth:api']);
-        $this->middleware('can:isAdmin')->except(['getContacts', 'getFavorites', 'getProperties', 'getSearches']);
+        $this->middleware('can:isAdmin')->except(['getContacts', 'getFavorites', 'getProperties', 'getSearches', 'getPropertiesContacts']);
     }
 
     /**
@@ -42,7 +42,7 @@ class UserController extends Controller
         $user = User::create($request->all());
 
         return response()->json([
-            'message' => 'Successfully registered!',
+            'message' => 'User added successfully!',
             'data' => new UserResource($user)
         ], 201);
     }
@@ -75,7 +75,7 @@ class UserController extends Controller
         $user->update($request->all());
 
         return response()->json([
-            'message' => 'Successfully updated!',
+            'message' => 'User updated successfully!',
             'data' => new UserResource($user)
         ], 200);
     }
@@ -91,7 +91,7 @@ class UserController extends Controller
         User::findOrFail($id)->delete();
 
         return response()->json([
-            'message' => 'Successfully deleted!'
+            'message' => 'User deleted successfully!'
         ], 200);
     }
 
@@ -132,6 +132,21 @@ class UserController extends Controller
             return response()->json(['message' => 'You are not authorized to view this resource.'], 403);
 
         return PropertyResource::collection($user->properties);
+    }
+
+    /**
+     * Get the user properties associated contacts
+     * @param  User  $user
+     * @return ContactResource
+     */
+    public function getPropertiesContacts(User $user)
+    {
+        if ($user->id !== auth()->id() && Gate::denies('isAdmin'))
+            return response()->json(['message' => 'You are not authorized to view this resource.'], 403);
+
+        return ContactResource::collection($user->properties->map(function ($property) {
+            return $property->contacts;
+        })->flatten());
     }
 
     /**
