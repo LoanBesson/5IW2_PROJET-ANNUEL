@@ -52,4 +52,5 @@ Route::middleware('api')->group(function () {
     Route::get('/users/{user}/favorites', [UserController::class, 'getFavorites']);
     Route::get('/users/{user}/properties', [UserController::class, 'getProperties']);
     Route::get('/users/{user}/searches', [UserController::class, 'getSearches']);
+    Route::get('/users/{user}/properties/contacts', [UserController::class, 'getPropertiesContacts']);
 });
