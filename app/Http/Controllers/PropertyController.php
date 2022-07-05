@@ -38,12 +38,12 @@ class PropertyController extends Controller
     {
         $property = Auth::user()->properties()->create($request->all());
 
-        if ($request->hasFile('image')) {
-            $image = $request->file('image')->getClientOriginalName();
-            $extension = $request->file('image')->getClientOriginalExtension();
+        if ($request->hasFile('image_path')) {
+            $image = $request->file('image_path')->getClientOriginalName();
+            $extension = $request->file('image_path')->getClientOriginalExtension();
             $fileNameToStore = str_replace(' ', '_', $image) . '_' . time() . '.' . $extension;
 
-            $property->image_path = $request->file('image')->storeAs('public/images', $fileNameToStore);
+            $property->image_path = $request->file('image_path')->storeAs('public/images', $fileNameToStore);
             $property->save();
         }
 
