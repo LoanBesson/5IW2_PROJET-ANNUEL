@@ -26,9 +26,12 @@ class SearchController extends Controller
        $result = null;
        if($query = $request->get('query'))
        {
-        $result = Property::search($query)->paginate(5);
-        return PropertyResource::collection($result);
+        $result = Property::search($query, function ($meilisearch, $query, $options) {
+            $options['filter'] = 'user_id=9';
+            return $meilisearch->search($query, $options);
+        })->get();
        }
+       dd($result);
     }
 
     /**

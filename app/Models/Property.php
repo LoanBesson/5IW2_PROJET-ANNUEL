@@ -17,6 +17,18 @@ class Property extends Model
         return $this->published === true;
     }
 
+    /**
+     * Get the indexable data array for the model.
+     *
+     * @return array
+     */
+    public function toSearchableArray()
+    {
+        $array = $this->toArray();
+ 
+        return $array;
+    }
+
     protected $fillable = [
         "title",
         "description",
