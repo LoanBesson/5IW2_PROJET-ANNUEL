@@ -11,12 +11,14 @@ use App\Http\Resources\ContactResource;
 use App\Http\Requests\UpdateUserRequest;
 use App\Http\Resources\FavoriteResource;
 use App\Http\Resources\PropertyResource;
+use Illuminate\Support\Facades\Gate;
 
 class UserController extends Controller
 {
     public function __construct()
     {
-        $this->middleware(['auth:api', 'can:isAdmin']);
+        $this->middleware(['auth:api']);
+        $this->middleware('can:isAdmin')->except(['getContacts', 'getFavorites', 'getProperties', 'getSearches']);
     }
 
     /**
@@ -100,6 +102,9 @@ class UserController extends Controller
      */
     public function getContacts(User $user)
     {
+        if ($user->id !== auth()->id() && Gate::denies('isAdmin'))
+            return response()->json(['message' => 'You are not authorized to view this resource.'], 403);
+
         return ContactResource::collection($user->contacts);
     }
 
@@ -110,6 +115,9 @@ class UserController extends Controller
      */
     public function getFavorites(User $user)
     {
+        if ($user->id !== auth()->id() && Gate::denies('isAdmin'))
+            return response()->json(['message' => 'You are not authorized to view this resource.'], 403);
+
         return FavoriteResource::collection($user->favorites);
     }
 
@@ -120,6 +128,9 @@ class UserController extends Controller
      */
     public function getProperties(User $user)
     {
+        if ($user->id !== auth()->id() && Gate::denies('isAdmin'))
+            return response()->json(['message' => 'You are not authorized to view this resource.'], 403);
+
         return PropertyResource::collection($user->properties);
     }
 
@@ -130,6 +141,9 @@ class UserController extends Controller
      */
     public function getSearches(User $user)
     {
+        if ($user->id !== auth()->id() && Gate::denies('isAdmin'))
+            return response()->json(['message' => 'You are not authorized to view this resource.'], 403);
+
         return SearchResource::collection($user->searches);
     }
 }
