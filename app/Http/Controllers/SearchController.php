@@ -8,6 +8,9 @@ use Illuminate\Support\Facades\Gate;
 use App\Http\Resources\SearchResource;
 use App\Http\Requests\StoreSearchRequest;
 use App\Http\Requests\UpdateSearchRequest;
+use Illuminate\Http\Request;
+use App\Models\Property;
+use App\Http\Resources\PropertyResource;
 
 class SearchController extends Controller
 {
@@ -16,17 +19,16 @@ class SearchController extends Controller
         $this->middleware('auth:api');
     }
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+ 
+    public function index(Request $request)
     {
-        if (Gate::denies('isAdmin'))
-            return response()->json(['error' => 'You are not authorized to show all searches.'], 403);
-
-        return SearchResource::collection(Search::all());
+        
+       $result = null;
+       if($query = $request->get('query'))
+       {
+        $result = Property::search($query)->paginate(5);
+        return PropertyResource::collection($result);
+       }
     }
 
     /**
