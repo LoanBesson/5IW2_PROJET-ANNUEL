@@ -4,7 +4,9 @@ namespace App\Providers;
 
 use App\Models\User;
 use App\Models\Contact;
+use App\Models\Favorite;
 use App\Models\Property;
+use App\Models\Search;
 use Laravel\Passport\Passport;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
@@ -49,14 +51,25 @@ class AuthServiceProvider extends ServiceProvider
 
         Gate::define('create-contact', function (User $user, $property_id) {
             $property = Property::find($property_id);
-            if ($property) {
+            if ($property)
                 return $user->id !== $property->user_id;
-            }
             return false;
         });
 
-        Gate::define('view-contact', function (User $user, Contact $contact) {
+        Gate::define('access-contact', function (User $user, Contact $contact) {
             return $user->isAdmin() || $user->id === $contact->prospect_id;
+        });
+
+        Gate::define('access-favorite', function (User $user, Favorite $favorite) {
+            return $user->isAdmin() || $user->id === $favorite->user_id;
+        });
+
+        Gate::define('access-property', function (User $user, Property $property) {
+            return $user->isAdmin() || $user->id === $property->user_id;
+        });
+
+        Gate::define('access-search', function (User $user, Search $search) {
+            return $user->isAdmin() || $user->id === $search->user_id;
         });
     }
 }

@@ -5,14 +5,22 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Resources\UserResource;
+use App\Http\Resources\SearchResource;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Resources\ContactResource;
 use App\Http\Requests\UpdateUserRequest;
 use App\Http\Resources\FavoriteResource;
 use App\Http\Resources\PropertyResource;
+use Illuminate\Support\Facades\Gate;
 
 class UserController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(['auth:api']);
+        $this->middleware('can:isAdmin')->except(['getContacts', 'getFavorites', 'getProperties', 'getSearches', 'getPropertiesContacts']);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -34,7 +42,7 @@ class UserController extends Controller
         $user = User::create($request->all());
 
         return response()->json([
-            'message' => 'Successfully registered!',
+            'message' => 'User added successfully!',
             'data' => new UserResource($user)
         ], 201);
     }
@@ -59,11 +67,15 @@ class UserController extends Controller
      */
     public function update(UpdateUserRequest $request, $id)
     {
+        $request->validate([
+            'email' => 'email|unique:users,email,'.$id,
+        ]);
+
         $user = User::findOrFail($id);
         $user->update($request->all());
 
         return response()->json([
-            'message' => 'Successfully updated!',
+            'message' => 'User updated successfully!',
             'data' => new UserResource($user)
         ], 200);
     }
@@ -79,7 +91,7 @@ class UserController extends Controller
         User::findOrFail($id)->delete();
 
         return response()->json([
-            'message' => 'Successfully deleted!'
+            'message' => 'User deleted successfully!'
         ], 200);
     }
 
@@ -90,6 +102,9 @@ class UserController extends Controller
      */
     public function getContacts(User $user)
     {
+        if ($user->id !== auth()->id() && Gate::denies('isAdmin'))
+            return response()->json(['message' => 'You are not authorized to view this resource.'], 403);
+
         return ContactResource::collection($user->contacts);
     }
 
@@ -100,6 +115,9 @@ class UserController extends Controller
      */
     public function getFavorites(User $user)
     {
+        if ($user->id !== auth()->id() && Gate::denies('isAdmin'))
+            return response()->json(['message' => 'You are not authorized to view this resource.'], 403);
+
         return FavoriteResource::collection($user->favorites);
     }
 
@@ -110,6 +128,37 @@ class UserController extends Controller
      */
     public function getProperties(User $user)
     {
+        if ($user->id !== auth()->id() && Gate::denies('isAdmin'))
+            return response()->json(['message' => 'You are not authorized to view this resource.'], 403);
+
         return PropertyResource::collection($user->properties);
+    }
+
+    /**
+     * Get the user properties associated contacts
+     * @param  User  $user
+     * @return ContactResource
+     */
+    public function getPropertiesContacts(User $user)
+    {
+        if ($user->id !== auth()->id() && Gate::denies('isAdmin'))
+            return response()->json(['message' => 'You are not authorized to view this resource.'], 403);
+
+        return ContactResource::collection($user->properties->map(function ($property) {
+            return $property->contacts;
+        })->flatten());
+    }
+
+    /**
+     * Get the user searches.
+     * @param  User  $user
+     * @return SearchResource
+     */
+    public function getSearches(User $user)
+    {
+        if ($user->id !== auth()->id() && Gate::denies('isAdmin'))
+            return response()->json(['message' => 'You are not authorized to view this resource.'], 403);
+
+        return SearchResource::collection($user->searches);
     }
 }

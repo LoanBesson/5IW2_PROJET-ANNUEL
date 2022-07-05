@@ -25,7 +25,6 @@ class StorePropertyRequest extends FormRequest
     public function rules()
     {
         return [
-            "user_id"               => 'required|exists:users,id',
             "title"                 => 'required|string|min:5|max:50',
             "description"           => 'required|string|min:5|max:255',
             "type"                  => 'required|in:appartment,house',
@@ -60,7 +59,6 @@ class StorePropertyRequest extends FormRequest
             "fees_price"            => 'required|numeric|min:0',
             "inventory_price"       => 'required|numeric|min:0',
             "published"             => 'required|boolean',
-            "image_path"            => 'string|nullable|max:255',
             "construction_date"     => 'required|date|before:now'
         ];
     }

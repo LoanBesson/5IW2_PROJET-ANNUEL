@@ -24,7 +24,11 @@ class UpdateSearchRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            "type"      => "in:appartment,house",
+            "category"  => "in:T1,T2,T3,T4,T5,T6,T7,T8,T9",
+            "city"      => "string",
+            "min_price" => "numeric|min:0",
+            "max_price" => "numeric|gte:min_price",
         ];
     }
 }

@@ -11,6 +11,11 @@ use App\Http\Requests\UpdateContactRequest;
 
 class ContactController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth:api');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -18,6 +23,9 @@ class ContactController extends Controller
      */
     public function index()
     {
+        if (Gate::denies('isAdmin'))
+            return response()->json(['error' => 'You are not authorized to show all contacts.'], 403);
+
         return ContactResource::collection(Contact::all());
     }
 
@@ -33,7 +41,7 @@ class ContactController extends Controller
         if (Gate::denies('create-contact', $request->property_id))
             return response()->json(['error' => 'You are not authorized to create a contact for this property.'], 403);
 
-        $contact = Contact::create($request->all());
+        $contact = Auth::user()->contacts()->create($request->all());
 
         return response()->json([
             'message' => 'Contact added successfully!',
@@ -49,12 +57,11 @@ class ContactController extends Controller
      */
     public function show(Contact $contact)
     {
-        if (Gate::denies('view-contact', $contact))
+        if (Gate::denies('access-contact', $contact))
             return response()->json(['error' => 'You are not authorized to view this contact.'], 403);
 
         return new ContactResource($contact);
     }
-
 
     /**
      * Update the specified resource in storage.
@@ -65,10 +72,13 @@ class ContactController extends Controller
      */
     public function update(UpdateContactRequest $request, Contact $contact)
     {
+        if (Gate::denies('access-contact', $contact))
+            return response()->json(['error' => 'You are not authorized to update this contact.'], 403);
+
         $contact->update($request->all());
 
         return response()->json([
-            'message' => 'Successfully updated!',
+            'message' => 'Contact updated successfully!',
             'data' => new ContactResource($contact)
         ], 201);
     }
@@ -81,6 +91,9 @@ class ContactController extends Controller
      */
     public function destroy(Contact $contact)
     {
+        if (Gate::denies('access-contact', $contact))
+            return response()->json(['error' => 'You are not authorized to destroy this contact.'], 403);
+
         $contact->delete();
 
         return response('', 204);
