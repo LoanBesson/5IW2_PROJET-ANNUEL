@@ -2,13 +2,22 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Property;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Storage;
+use App\Http\Resources\PropertyResource;
 use App\Http\Requests\StorePropertyRequest;
 use App\Http\Requests\UpdatePropertyRequest;
-use App\Http\Resources\PropertyResource;
-use App\Models\Property;
 
 class PropertyController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth:api')->except('index', 'show');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -27,10 +36,19 @@ class PropertyController extends Controller
      */
     public function store(StorePropertyRequest $request)
     {
-        $property = Property::create($request->all());
+        $property = Auth::user()->properties()->create($request->all());
+
+        if ($request->hasFile('image_path')) {
+            $image = $request->file('image_path')->getClientOriginalName();
+            $extension = $request->file('image_path')->getClientOriginalExtension();
+            $fileNameToStore = str_replace(' ', '_', $image) . '_' . time() . '.' . $extension;
+
+            $property->image_path = $request->file('image_path')->storeAs('public/images', $fileNameToStore);
+            $property->save();
+        }
 
         return response()->json([
-            'message' => 'Successfully registered!',
+            'message' => 'Property added successfully!',
             'data' => new PropertyResource($property)
         ], 201);
     }
@@ -43,7 +61,12 @@ class PropertyController extends Controller
      */
     public function show(Property $property)
     {
-        return new PropertyResource($property);
+        return response()->json([
+            'data' => [
+                new PropertyResource($property),
+                'imgUrl' => Storage::url($property->image_path),
+                ]
+        ], 201);
     }
 
     /**
@@ -55,10 +78,13 @@ class PropertyController extends Controller
      */
     public function update(UpdatePropertyRequest $request, Property $property)
     {
+        if (Gate::denies('access-property', $property))
+            return response()->json(['error' => 'You are not authorized to update this property.'], 403);
+
         $property->update($request->all());
 
         return response()->json([
-            'message' => 'Successfully updated!',
+            'message' => 'Property updated successfully!',
             'data' => new PropertyResource($property)
         ], 201);
     }
@@ -71,6 +97,9 @@ class PropertyController extends Controller
      */
     public function destroy(Property $property)
     {
+        if (Gate::denies('access-property', $property))
+            return response()->json(['error' => 'You are not authorized to delete this property.'], 403);
+
         $property->delete();
 
         return response('', 204);

@@ -2,9 +2,7 @@
 <br>
 
 ---
-### Api
----
-    cd api/ && \
+    
     cp .env.example .env && \
     composer install && \
     sail up -d && \
@@ -12,6 +10,15 @@
     sail artisan migrate && \
     sail artisan db:seed && \
     sail artisan passport:install
+    sail artisan jwt:secret
+
+### Mailhog
+brew install mailhog
+brew services start mailhog
+brew services stop mailhog
+
+### Meilisearch
+sail artisan scout:import "App\Models\Property"
 
 #### En cas de problème de token
     sail artisan passport:keys --force && \

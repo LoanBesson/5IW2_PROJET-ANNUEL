@@ -15,11 +15,11 @@ class FavoriteResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'id'                => $this->id,
-            'user'              => $this->user,
-            'property'          => $this->property,
-            'created_at'        => $this->created_at,
-            'updated_at'        => $this->updated_at,
+            'id'         => $this->id,
+            'user'       => $this->user,
+            'property'   => $this->property,
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at,
         ];
     }
 }

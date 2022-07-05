@@ -15,13 +15,13 @@ class ContactResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'id'                => $this->id,
-            'prospect'          => $this->prospect,
-            'property'           => $this->property,
-            'desired_date'      => $this->title,
-            'status'            => $this->description,
-            'created_at'        => $this->created_at,
-            'updated_at'        => $this->updated_at,
+            'id'           => $this->id,
+            'desired_date' => $this->desired_date,
+            'prospect'     => $this->prospect,
+            'property'     => $this->property,
+            'status'       => $this->status,
+            'created_at'   => $this->created_at,
+            'updated_at'   => $this->updated_at,
         ];
     }
 }

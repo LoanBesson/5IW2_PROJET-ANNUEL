@@ -25,17 +25,10 @@ class StorePropertyRequest extends FormRequest
     public function rules()
     {
         return [
-            "user_id"               => 'required|exists:users,id',
             "title"                 => 'required|string|min:5|max:50',
             "description"           => 'required|string|min:5|max:255',
-            "type"                  => [
-                                        'required',
-                                        Rule::in(['appartment', 'house']),
-                                        ],
-            "category"              => [
-                                        'required',
-                                        Rule::in(['T1', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'T8', 'T9']),
-                                        ],
+            "type"                  => 'required|in:appartment,house',
+            "category"              => 'required|in:T1,T2,T3,T4,T5,T6,T7,T8,T9',
             "area"                  => 'required|numeric|min:1',
             "floor"                 => 'required|integer|min:0',
             "floors"                => 'required|integer|min:1',
@@ -47,14 +40,8 @@ class StorePropertyRequest extends FormRequest
             "contains_storage"      => 'required|boolean',
             "is_kitchen_separated"  => 'required|boolean',
             "contains_dining_room"  => 'required|boolean',
-            "ground"                => [
-                                        'required',
-                                        Rule::in(['wood', 'rock']),
-                                        ],
-            "heater"                => [
-                                        'required',
-                                        Rule::in(['electrical', 'gas']),
-                                        ],
+            "ground"                => 'required|in:wood,rock',
+            "heater"                => 'required|in:electrical,gas',
             "fireplace"             => 'required|boolean',
             "elevator"              => 'required|boolean',
             "external_storage"      => 'required|boolean',
@@ -65,17 +52,13 @@ class StorePropertyRequest extends FormRequest
             "address"               => 'required|string',
             "zip_code"              => 'required|integer|min:1000|max:96000',
             "city"                  => 'required|string',
-            "rentOrSale"            => [
-                                        'required',
-                                        Rule::in(['rent', 'sale'])
-                                        ],
+            "rentOrSale"            => 'required|in:rent,sale',
             "price"                 => 'required|numeric|min:1',
             "charges"               => 'required|numeric|min:0',
             "guarentee"             => 'required|numeric|min:0',
             "fees_price"            => 'required|numeric|min:0',
             "inventory_price"       => 'required|numeric|min:0',
             "published"             => 'required|boolean',
-            "image_path"            => 'required|string',
             "construction_date"     => 'required|date|before:now'
         ];
     }
