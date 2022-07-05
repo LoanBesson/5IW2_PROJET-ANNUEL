@@ -14,47 +14,45 @@ use Tests\TestCase;
 
 class VerifyEmailTest extends TestCase
 {
-    // use RefreshDatabase;
+     use RefreshDatabase;
 
-    // /** @test */
-    // public function verify_email_address()
-    // {
-    //     $user = User::create([
-    //         'name' => 'Constantin Druc',
-    //         'email' => 'druc@pinsmile.com',
-    //         'password' => bcrypt('secret')
-    //     ]);
+     /** @test */
+     public function verify_email_address()
+     {
+        // VerifyEmail extends Illuminate\Auth\Notifications\VerifyEmail in this example
+    $notification = new VerifyEmail();
+    $user = User::factory()->create();
 
-    //     $url = URL::temporarySignedRoute(
-    //         'verification.verify',
-    //         Carbon::now()->addMinutes(Config::get('auth.verification.expire', 60)),
-    //         [
-    //             'id' => $user->getKey(),
-    //             'hash' => sha1($user->getEmailForVerification()),
-    //         ]
-    //     );
+    // New user should not has verified their email yet
+    $this->assertFalse($user->hasVerifiedEmail());
 
-    //     $response = $this->get($url);
-    //     $response->assertSuccessful();
+    $mail = $notification->toMail($user);
+    $uri = $mail->actionUrl;
 
-    //     $this->assertNotNull($user->fresh()->email_verified_at);
-    // }
+    // Simulate clicking on the validation link
+    $this->get($uri)->assertRedirect(route('verification.verify', ['id' => $user->id, 'hash' => $mail->verificationHash]));
 
-    // /** @test */
-    // public function resend_verification_email()
-    // {
-    //     Notification::fake();
-    //     $user = User::create([
-    //         'name' => 'Constantin Druc',
-    //         'email' => 'druc@pinsmile.com',
-    //         'password' => bcrypt('secret')
-    //     ]);
 
-    //     Sanctum::actingAs($user);
 
-    //     $response = $this->postJson(route('verification.send'));
-    //     $response->assertSuccessful();
+    // User should have verified their email
+    $this->assertTrue(User::find($user->id)->hasVerifiedEmail());
+     }
 
-    //     Notification::assertSentTo($user, VerifyEmail::class);
-    // }
+     /** @test */
+     public function resend_verification_email()
+     {
+         Notification::fake();
+         $user = User::create([
+             'name' => 'Constantin Druc',
+             'email' => 'druc@pinsmile.com',
+             'password' => bcrypt('secret')
+         ]);
+
+         Sanctum::actingAs($user);
+
+         $response = $this->postJson(route('api/auth/email/verification-notification'));
+         $response->assertSuccessful();
+
+         Notification::assertSentTo($user, VerifyEmail::class);
+     }
 }
