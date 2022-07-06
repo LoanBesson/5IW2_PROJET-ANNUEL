@@ -1,5 +1,5 @@
 #!/bin/bash
-sudo apt-get install -y php-redis
+apt install -y php-redis
 composer install --optimize-autoloader --no-dev
 php artisan config:cache
 php artisan route:cache
