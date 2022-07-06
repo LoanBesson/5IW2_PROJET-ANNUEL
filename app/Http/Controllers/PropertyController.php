@@ -49,8 +49,8 @@ class PropertyController extends Controller
             $property->save();
         }
 
-        Artisan::command("scout:import", function () {
-            $this->info('Scout has imported models');
+        Artisan::command("scout:import 'App\Models\Property'", function () {
+            $this->info('Scout has imported Property model');
         });
 
         return response()->json([
@@ -89,6 +89,10 @@ class PropertyController extends Controller
 
         $property->update($request->all());
 
+        Artisan::command("scout:import 'App\Models\Property'", function () {
+            $this->info('Scout has imported Property model');
+        });
+
         return response()->json([
             'message' => 'Property updated successfully!',
             'data' => new PropertyResource($property)
@@ -107,6 +111,10 @@ class PropertyController extends Controller
             return response()->json(['error' => 'You are not authorized to delete this property.'], 403);
 
         $property->delete();
+
+        Artisan::command("scout:import 'App\Models\Property'", function () {
+            $this->info('Scout has imported Property model');
+        });
 
         return response('', 204);
     }
