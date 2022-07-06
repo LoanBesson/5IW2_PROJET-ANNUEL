@@ -1,5 +1,5 @@
 #!/bin/bash
-pecl install redis
+sudo apt-get install -y php-redis
 composer install --optimize-autoloader --no-dev
 php artisan config:cache
 php artisan route:cache

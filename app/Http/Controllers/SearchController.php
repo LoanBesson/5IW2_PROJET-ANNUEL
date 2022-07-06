@@ -8,25 +8,49 @@ use Illuminate\Support\Facades\Gate;
 use App\Http\Resources\SearchResource;
 use App\Http\Requests\StoreSearchRequest;
 use App\Http\Requests\UpdateSearchRequest;
+use Illuminate\Http\Request;
+use App\Models\Property;
+use App\Http\Resources\PropertyResource;
+use MeiliSearch\Endpoints\Indexes;
 
 class SearchController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth:api');
+        $this->middleware('auth:api')->except('index');
     }
 
-    /**
+ /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        if (Gate::denies('isAdmin'))
-            return response()->json(['error' => 'You are not authorized to show all searches.'], 403);
+        $searches = collect();
 
-        return SearchResource::collection(Search::all());
+        if ($query = $request->get('query') ?? '*') {
+            $searches = Property::search($query, function($meilisearch, $query, $options) use ($request) {
+                if ($filters = json_decode($request->get('filters'))) {
+                    $options['filter'] = '';
+
+                    foreach ($filters as $key => $filter) {
+                        if (isset($filter->field) && isset($filter->value)) {
+                            if (!isset($filter->operand))
+                                $filter->operand = '=';
+
+                            $options['filter'] .= $filter->field . $filter->operand . $filter->value . ($key === array_key_last($filters) ? '' : ' AND ');
+                        }
+                    }
+                }
+
+                // dd($options);
+
+                return $meilisearch->search($query, $options);
+            })->paginate($request->get('per_page', 10));
+        }
+
+        return PropertyResource::collection($searches);
     }
 
     /**

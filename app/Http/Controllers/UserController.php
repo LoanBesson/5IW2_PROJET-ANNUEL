@@ -109,6 +109,19 @@ class UserController extends Controller
     }
 
     /**
+     * Get the user contacts where desired_date is passed.
+     * @param  User  $user
+     * @return SearchResource
+     */
+    public function getPassedContacts(User $user)
+    {
+        if ($user->id !== auth()->id() && Gate::denies('isAdmin'))
+            return response()->json(['message' => 'You are not authorized to view this resource.'], 403);
+
+        return ContactResource::collection($user->contacts->where('desired_date', '<', date('Y-m-d H:i')));
+    }
+
+    /**
      * Get the user favorites.
      * @param  User  $user
      * @return FavoriteResource
@@ -146,6 +159,21 @@ class UserController extends Controller
 
         return ContactResource::collection($user->properties->map(function ($property) {
             return $property->contacts;
+        })->flatten());
+    }
+
+    /**
+     * Get the user properties associated contacts where desired_date is passed.
+     * @param  User  $user
+     * @return SearchResource
+     */
+    public function getPassedPropertiesContacts(User $user)
+    {
+        if ($user->id !== auth()->id() && Gate::denies('isAdmin'))
+            return response()->json(['message' => 'You are not authorized to view this resource.'], 403);
+
+        return ContactResource::collection($user->properties->map(function ($property) {
+            return $property->contacts->where('desired_date', '<', date('Y-m-d H:i'));
         })->flatten());
     }
 

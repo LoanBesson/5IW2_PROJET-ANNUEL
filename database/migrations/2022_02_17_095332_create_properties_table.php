@@ -20,7 +20,7 @@ return new class extends Migration
             $table->text('description');
             $table->enum('type', ['appartment', 'house'])->default('appartment');
             $table->enum('category', ['T1', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'T8', 'T9'])->default('T1');
-            $table->float('area');
+            $table->integer('area');
             $table->integer('floor')->default(0);
             $table->integer('floors')->default(1);
             $table->integer('rooms')->default(1);
@@ -44,7 +44,7 @@ return new class extends Migration
             $table->integer('zip_code');
             $table->string('city');
             $table->enum('rentOrSale', ['rent', 'sale'])->default('sale');
-            $table->float('price');
+            $table->integer('price');
             $table->float('charges');
             $table->float('guarentee');
             $table->float('fees_price');

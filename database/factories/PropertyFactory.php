@@ -44,7 +44,7 @@ class PropertyFactory extends Factory
             "description"           => $this->faker->realText(),
             "type"                  => $types[$type],
             "category"              => $categories[$category],
-            "area"                  => $this->faker->randomFloat(2,1,200),
+            "area"                  => random_int(15,500),
             "floor"                 => random_int(0,2),
             "floors"                => random_int(1,2),
             "rooms"                 => random_int(1,6),
