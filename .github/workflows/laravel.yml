@@ -31,9 +31,7 @@ jobs:
       run: |
         mkdir -p database
         touch database/database.sqlite
-    - name: Migrate
-      run: php artisan migrate:fresh --seed
     - name: Laravel Tests
       run: php artisan test:units
-   
+
 
