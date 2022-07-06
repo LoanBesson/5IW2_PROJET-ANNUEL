@@ -6,6 +6,7 @@ use App\Models\Property;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Resources\PropertyResource;
 use App\Http\Requests\StorePropertyRequest;
@@ -47,6 +48,10 @@ class PropertyController extends Controller
             $property->image_path = $request->file('image_path')->storeAs('public/images', $fileNameToStore);
             $property->save();
         }
+
+        Artisan::command("scout:import", function () {
+            $this->info('Scout has imported models');
+        });
 
         return response()->json([
             'message' => 'Property added successfully!',
