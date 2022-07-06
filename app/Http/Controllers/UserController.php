@@ -150,6 +150,21 @@ class UserController extends Controller
     }
 
     /**
+     * Get the user properties associated searches where desired_date is passed.
+     * @param  User  $user
+     * @return SearchResource
+     */
+    public function getPassedPropertiesContacts(User $user)
+    {
+        if ($user->id !== auth()->id() && Gate::denies('isAdmin'))
+            return response()->json(['message' => 'You are not authorized to view this resource.'], 403);
+
+        return ContactResource::collection($user->properties->map(function ($property) {
+            return $property->contacts->where('desired_date', '<', date('Y-m-d', strtotime(now())));
+        })->flatten());
+    }
+
+    /**
      * Get the user searches.
      * @param  User  $user
      * @return SearchResource
