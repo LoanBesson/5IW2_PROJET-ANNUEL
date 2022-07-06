@@ -16,11 +16,15 @@ class SearchController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth:api');
+        $this->middleware('auth:api')->except('index');
     }
 
-
-    public function __invoke(Request $request)
+ /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index(Request $request)
     {
 
         $result = Property::search($query = '', function ($meilisearch, $query, $options) use ($request) {
@@ -144,17 +148,8 @@ class SearchController extends Controller
                 $options['filter'] = 'rentOrSale =' . $request->rentOrSale . ' AND type =' . $request->type . ' AND category =' . $request->category . ' AND area >' . $request->area . ' AND city =' . $request->city;
             }
 
-
-
-            if ($request->has('price')) {
-                $options['filter'] = 'price >= 300000';
-            }
-
-            // $options['filter'] = 'zip_code = '.$request->get('zip_code').' AND rentOrSale = "'.$request->get('rentOrSale').'"';
-
             return $meilisearch->search($query, $options);
-        })->paginate(5)
-            ->withQueryString();
+        })->get();
         return $result;
     }
 
