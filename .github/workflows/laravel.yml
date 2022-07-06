@@ -31,7 +31,9 @@ jobs:
       run: |
         mkdir -p database
         touch database/database.sqlite
-    - name: Add alias sail and test
-      run: |
-        alias sail='bash vendor/bin/sail' && sail test
+    - name: Migrate
+      run: php artisan migrate:fresh --seed
+    - name: Laravel Tests
+      run: php artisan test:units
+   
 
