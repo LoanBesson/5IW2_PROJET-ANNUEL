@@ -43,7 +43,7 @@ Route::get('/login/{provider}', [SocialeController::class,'redirectToProvider'])
 Route::get('/login/{provider}/callback', [SocialeController::class,'handleProviderCallback']);
 
 //route search
-Route::get('search', [SearchController::class, 'index']);
+Route::get('search', [SearchController::class, '__invoke']);
 
 Route::middleware('api')->group(function () {
     Route::resource('contacts', ContactController::class, ['except' => ['create', 'edit']]);
