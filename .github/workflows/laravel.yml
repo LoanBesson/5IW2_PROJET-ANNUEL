@@ -30,5 +30,11 @@ jobs:
         mkdir -p database
         touch database/database.sqlite
     - name: Execute tests (Unit and Feature tests) via PHPUnit
+      env:
+        DB_CONNECTION: pgsql
+        DB_DATABASE: api
+        CACHE_DRIVER: file
+        SESSION_DRIVER: file
+        QUEUE_CONNECTION: sync
       run: vendor/bin/phpunit
 
