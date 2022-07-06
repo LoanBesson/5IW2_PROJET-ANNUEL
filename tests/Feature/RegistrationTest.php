@@ -3,7 +3,6 @@
 namespace Tests\Feature;
 
 use App\Models\User;
-use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Notification;
 use Tests\TestCase;
@@ -16,19 +15,34 @@ class RegistrationTest extends TestCase
     public function register_new_user()
     {
         Notification::fake();
-        $response = $this->postJson('/api/registration', [
-            'name' => 'Constantin Druc',
+        $response = $this->postJson('/api/auth/register', [
+            'lastname' => 'Druc',
+            'firstname' => 'Constantin',
             'email' => 'druc@pinsmile.com',
             'password' => 'password'
         ]);
 
         $response->assertSuccessful();
 
-        $user = User::where('email', 'druc@pinsmile.com')->first();
-        Notification::assertSentTo($user, VerifyEmail::class);
-
-        $this->assertNotEmpty($response->getContent());
-        $this->assertDatabaseHas('users', ['email' => 'druc@pinsmile.com']);
 
     }
+
+
+
+    /** @test */
+
+    //login_new_user
+    public function login_new_user()
+    {
+        $user = User::factory()->create();
+        $response = $this->postJson('/api/auth/login', [
+            'email' => $user->email,
+            'password' => 'password'
+        ]);
+
+        $response->assertSuccessful();
+    }
+
+
+
 }
