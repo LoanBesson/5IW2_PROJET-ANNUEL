@@ -31,11 +31,11 @@ jobs:
       run: |
         mkdir -p database
         touch database/database.sqlite
-    #- name: Execute tests (Unit and Feature tests) via PHPUnit
-    #  env:
-    #    DB_CONNECTION: pgsql
-    #    DB_DATABASE: database/database.sqlite
-    #  run: vendor/bin/phpunit
-    - name: Execute tests (Unit and Feature tests) via PHPUnit
-      run: vendor/bin/phpunit
+    - name: Add alias sail
+      run: |
+        echo "alias sail='php vendor/bin/sail'" >> ~/.bashrc
+        source ~/.bashrc
+    - name: Run Tests
+      run: |
+        sail test
 
