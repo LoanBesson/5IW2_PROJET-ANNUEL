@@ -50,7 +50,6 @@ class SearchController extends Controller
             })->paginate($request->get('per_page', 10));
         }
 
-
         return PropertyResource::collection($searches);
     }
 

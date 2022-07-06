@@ -3,6 +3,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
+use App\Notifications\RegisterNotification;
 use Validator;
 
 class AuthController extends Controller
@@ -52,6 +53,9 @@ class AuthController extends Controller
                     $validator->validated(),
                     ['password' => bcrypt($request->password)]
                 ));
+
+        $user->notify(new RegisterNotification());
+
         return response()->json([
             'message' => 'User successfully registered',
             'user' => $user
