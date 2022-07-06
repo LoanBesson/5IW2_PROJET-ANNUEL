@@ -31,11 +31,8 @@ jobs:
       run: |
         mkdir -p database
         touch database/database.sqlite
-    - name: Add alias sail
+    - name: Add alias sail and test
       run: |
         echo "alias sail='php vendor/bin/sail'" >> ~/.bashrc
-        source ~/.bashrc
-    - name: Run Tests
-      run: |
-        sail test
+        source ~/.bashrc && sail test
 
