@@ -44,8 +44,6 @@ class SearchController extends Controller
                     }
                 }
 
-                // dd($options);
-
                 return $meilisearch->search($query, $options);
             })->paginate($request->get('per_page', 10));
         }
