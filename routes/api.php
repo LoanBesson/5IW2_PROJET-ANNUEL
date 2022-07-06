@@ -49,6 +49,7 @@ Route::middleware('api')->group(function () {
     Route::resource('users', UserController::class, ['except' => ['create', 'edit']]);
     Route::resource('search', SearchController::class,  ['except' => ['create', 'edit']]);
     Route::get('/users/{user}/contacts', [UserController::class, 'getContacts']);
+    Route::get('/users/{user}/contacts/passed', [UserController::class, 'getPassedContacts']);
     Route::get('/users/{user}/favorites', [UserController::class, 'getFavorites']);
     Route::get('/users/{user}/properties', [UserController::class, 'getProperties']);
     Route::get('/users/{user}/searches', [UserController::class, 'getSearches']);
