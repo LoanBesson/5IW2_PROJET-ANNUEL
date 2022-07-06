@@ -11,7 +11,12 @@ class Property extends Model
     use HasFactory;
     use Searchable;
 
-    
+    // protected $casts = [
+    //     'price' => 'float',
+    //     'charges' => 'float',
+    // ];
+
+
     public function shouldBeSearchable()
     {
         return $this->published === true;
@@ -25,7 +30,7 @@ class Property extends Model
     public function toSearchableArray()
     {
         $array = $this->toArray();
- 
+
         return $array;
     }
 
