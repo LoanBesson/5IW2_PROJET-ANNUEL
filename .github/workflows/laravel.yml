@@ -36,5 +36,7 @@ jobs:
         CACHE_DRIVER: file
         SESSION_DRIVER: file
         QUEUE_CONNECTION: sync
+        SCOUT_DRIVER: meilisearch
+        MEILISEARCH_HOST: https://meilisearch.lemaconduweb.fr
       run: vendor/bin/phpunit
 
