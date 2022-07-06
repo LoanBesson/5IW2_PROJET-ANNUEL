@@ -57,7 +57,7 @@ class AuthServiceProvider extends ServiceProvider
         });
 
         Gate::define('access-contact', function (User $user, Contact $contact) {
-            return $user->isAdmin() || $user->id === $contact->prospect_id;
+            return $user->isAdmin() || $user->id === $contact->prospect_id || $user->id === $contact->property->user_id;
         });
 
         Gate::define('access-favorite', function (User $user, Favorite $favorite) {

@@ -15,7 +15,7 @@ class PropertyController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth:api')->except('index', 'show');
+        $this->middleware('auth:api');
     }
 
     /**
@@ -25,7 +25,9 @@ class PropertyController extends Controller
      */
     public function index()
     {
-        return PropertyResource::collection(Property::all());
+        $properties = Property::all();
+        $properties = Property::paginate(10);
+        return PropertyResource::collection($properties);
     }
 
     /**
