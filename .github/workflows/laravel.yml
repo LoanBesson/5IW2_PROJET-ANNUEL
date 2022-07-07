@@ -29,6 +29,9 @@ jobs:
       run: |
         mkdir -p database
         touch database/database.sqlite
+    - name: Storage link and install passport
+      run: |
+        php artisan storage:link && php artisan passport:install
     - name: tests phpunit
       run: |
         php artisan test
