@@ -18,7 +18,7 @@ class UserController extends Controller
     public function __construct()
     {
         $this->middleware(['auth:api']);
-        $this->middleware('can:isAdmin')->except(['getContacts', 'getFavorites', 'getProperties', 'getSearches', 'getPropertiesContacts']);
+        $this->middleware('can:isAdmin')->except(['update', 'getContacts', 'getFavorites', 'getProperties', 'getSearches', 'getPropertiesContacts']);
     }
 
     /**
