@@ -29,4 +29,6 @@ jobs:
       run: |
         mkdir -p database
         touch database/database.sqlite
-
+    - name: tests phpunit
+      run: |
+        php artisan test
