@@ -19,6 +19,29 @@ class PropertyController extends Controller
         $this->middleware('auth:api')->except('index', 'show');
     }
 
+
+    //get property's count  created_at from 30 days ago only if i am admin
+    public function getNewCountProperties()
+    {
+        if (Gate::allows('isAdmin')) {
+            $count = Property::where('created_at', '>=', now()->subDays(30))->count();
+            return response()->json(['count' => $count]);
+        } else {
+            return response()->json(['error' => 'You are not authorized to access this resource.'], 401);
+        }
+    }
+
+    // get property's count if i am admin
+    public function getCountProperties()
+    {
+        if (Gate::allows('isAdmin')) {
+            $count = Property::count();
+            return response()->json(['count' => $count]);
+        } else {
+            return response()->json(['error' => 'You are not authorized to access this resource.'], 401);
+        }
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -26,7 +49,7 @@ class PropertyController extends Controller
      */
     public function index()
     {
-        $properties = Property::paginate(10);
+        $properties = Property::where('published', 1)->paginate(10);
         return PropertyResource::collection($properties);
     }
 

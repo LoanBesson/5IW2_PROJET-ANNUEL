@@ -26,6 +26,28 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+    public function getNewCountUsers()
+    {
+        if (Gate::allows('isAdmin')) {
+            $count = User::where('created_at', '>=', now()->subDays(30))->count();
+            return response()->json(['count' => $count]);
+        } else {
+            return response()->json(['error' => 'You are not authorized to access this resource.'], 401);
+        }
+    }
+
+    // get property's count if i am admin
+    public function getCountUsers()
+    {
+        if (Gate::allows('isAdmin')) {
+            $count = User::count();
+            return response()->json(['count' => $count]);
+        } else {
+            return response()->json(['error' => 'You are not authorized to access this resource.'], 401);
+        }
+    }
+
     public function index()
     {
         return UserResource::collection(User::all());
