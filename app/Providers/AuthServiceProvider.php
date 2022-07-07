@@ -37,8 +37,8 @@ class AuthServiceProvider extends ServiceProvider
         Passport::routes();
 
         VerifyEmail::toMailUsing(function ($notifiable, $url) {
+            $url = str_replace('http://', 'https://', $url); 
             $spaUrl = env('FRONT_URL')."/verification-email//?url=$url";
-
             return (new MailMessage)
                 ->subject('Mail de verification')
                 ->line('Cliquer sur le lien pour activer votre compte.')
