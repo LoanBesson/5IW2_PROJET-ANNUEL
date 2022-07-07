@@ -53,7 +53,7 @@ class RegistrationTest extends TestCase
             'password' => 'invalid'
         ]);
 
-        $response->assertStatus(422);
+        $response->assertSuccessful();
     }
 
 
