@@ -37,7 +37,7 @@ class AuthServiceProvider extends ServiceProvider
         Passport::routes();
 
         VerifyEmail::toMailUsing(function ($notifiable, $url) {
-            $spaUrl = "http://localhost:4200/verification-email//?url=$url";
+            $spaUrl = env('FRONT_URL')."/verification-email//?url=$url";
 
             return (new MailMessage)
                 ->subject('Mail de verification')

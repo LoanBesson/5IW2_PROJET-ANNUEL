@@ -27,28 +27,26 @@ class SearchController extends Controller
      */
     public function index(Request $request)
     {
-        $searches = collect();
+        $query = $request->get('query') ?? '*';
 
-        if ($query = $request->get('query') ?? '*') {
-            $searches = Property::search($query, function($meilisearch, $query, $options) use ($request) {
-                if ($filters = json_decode($request->get('filters'))) {
-                    $options['filter'] = '';
+        $properties = Property::search($query, function($meilisearch, $query, $options) use ($request) {
+            if ($filters = $request->except('query', 'per_page')) {
+                $options['filter'] = '';
 
-                    foreach ($filters as $key => $filter) {
-                        if (isset($filter->field) && isset($filter->value)) {
-                            if (!isset($filter->operand))
-                                $filter->operand = '=';
+                foreach ($filters as $field => $value) {
+                    $value = explode(',', $value);
 
-                            $options['filter'] .= $filter->field . $filter->operand . $filter->value . ($key === array_key_last($filters) ? '' : ' AND ');
-                        }
-                    }
+                    if (count($value) === 1)
+                        $value[1] = '=';
+
+                    $options['filter'] .= $field . $value[1] . $value[0] . ($field === array_key_last($filters) ? '' : ' AND ');
                 }
+            }
 
-                return $meilisearch->search($query, $options);
-            })->paginate($request->get('per_page', 10));
-        }
+            return $meilisearch->search($query, $options);
+        })->paginate($request->get('per_page', 10));
 
-        return PropertyResource::collection($searches);
+        return PropertyResource::collection($properties);
     }
 
     /**

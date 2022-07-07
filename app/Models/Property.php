@@ -2,12 +2,30 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Laravel\Scout\Searchable;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Property extends Model
 {
-    use HasFactory;
+    use HasFactory, Searchable;
+
+    public function shouldBeSearchable()
+    {
+        return $this->published === true;
+    }
+
+    /**
+     * Get the indexable data array for the model.
+     *
+     * @return array
+     */
+    public function toSearchableArray()
+    {
+        $array = $this->toArray();
+
+        return $array;
+    }
 
     protected $fillable = [
         "title",
