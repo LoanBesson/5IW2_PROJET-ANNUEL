@@ -32,7 +32,7 @@ class RegistrationTest extends TestCase
     /** @test */
 
     //login_new_user
-    public function login_new_user()
+    public function test_users_can_authenticate_using_the_login_screen()
     {
         $user = User::factory()->create();
         $response = $this->postJson('/api/auth/login', [
@@ -42,6 +42,20 @@ class RegistrationTest extends TestCase
 
         $response->assertSuccessful();
     }
+
+    /** @test */
+    //test_users_can_not_authenticate_with_invalid_password
+    public function test_users_can_not_authenticate_with_invalid_password()
+    {
+        $user = User::factory()->create();
+        $response = $this->postJson('/api/auth/login', [
+            'email' => $user->email,
+            'password' => 'invalid'
+        ]);
+
+        $response->assertStatus(422);
+    }
+
 
 
 
