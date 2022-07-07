@@ -31,8 +31,8 @@ jobs:
         touch database/database.sqlite
     - name: Execute tests (Unit and Feature tests) via PHPUnit
       env:
-        DB_CONNECTION: pgsql
-        DB_DATABASE: api
+        DB_CONNECTION: sqlite
+        DB_DATABASE: database.sqlite
         CACHE_DRIVER: file
         SESSION_DRIVER: file
         QUEUE_CONNECTION: sync
