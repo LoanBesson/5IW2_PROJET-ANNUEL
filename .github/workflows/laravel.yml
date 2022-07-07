@@ -31,7 +31,7 @@ jobs:
         touch database/database.sqlite
     - name: Storage link and install passport
       run: |
-        php artisan storage:link && passport:keys --force && php artisan passport:install --force
+        php artisan storage:link && php artisan passport:keys --force && php artisan passport:install --force
     - name: tests phpunit
       run: |
         php artisan test
