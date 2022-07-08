@@ -56,7 +56,7 @@ class PropertyController extends Controller
 
     public function getAllProperties()
     {
-        return PropertyResource::collection($properties);
+        return PropertyResource::collection(Property::all());
     }
 
     /**
