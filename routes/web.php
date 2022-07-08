@@ -1,5 +1,6 @@
 <?php
 
+// use Twilio\Http\Client;
 // use Illuminate\Support\Facades\Route;
 // use App\Http\Controllers\VerifyEmailController;
 
@@ -14,6 +15,6 @@
 // |
 // */
 
-// // Route::get('/', function () {
-// //     return view('welcome');
-// // });
+// Route::get('/', function () {
+
+// });

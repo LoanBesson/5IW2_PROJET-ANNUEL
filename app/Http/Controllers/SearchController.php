@@ -3,15 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Models\Search;
+use Twilio\Rest\Client;
+use App\Models\Property;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use App\Http\Resources\SearchResource;
+use App\Http\Resources\PropertyResource;
 use App\Http\Requests\StoreSearchRequest;
 use App\Http\Requests\UpdateSearchRequest;
-use Illuminate\Http\Request;
-use App\Models\Property;
-use App\Http\Resources\PropertyResource;
-use MeiliSearch\Endpoints\Indexes;
 
 class SearchController extends Controller
 {

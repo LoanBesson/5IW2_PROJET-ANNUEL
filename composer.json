@@ -17,7 +17,9 @@
         "laravel/scout": "^9.4",
         "laravel/socialite": "^5.5",
         "laravel/tinker": "^2.7",
+        "league/flysystem-sftp-v3": "^3.0",
         "meilisearch/meilisearch-php": "^0.23.3",
+        "twilio/sdk": "^6.38",
         "tymon/jwt-auth": "^1.0"
     },
     "require-dev": {
