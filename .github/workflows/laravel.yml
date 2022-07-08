@@ -29,8 +29,8 @@ jobs:
       run: |
         mkdir -p database
         touch database/database.sqlite
-    - name: Run all tests
-      run: ./vendor/bin/phpunit
-      env:
-        APP_ENV: testing
+    # - name: Run all tests
+    #   run: ./vendor/bin/phpunit
+    #   env:
+    #     APP_ENV: testing
 
