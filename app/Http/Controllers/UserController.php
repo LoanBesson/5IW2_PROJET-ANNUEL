@@ -5,13 +5,14 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Resources\UserResource;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use App\Http\Resources\SearchResource;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Resources\ContactResource;
 use App\Http\Requests\UpdateUserRequest;
 use App\Http\Resources\FavoriteResource;
 use App\Http\Resources\PropertyResource;
-use Illuminate\Support\Facades\Gate;
 
 class UserController extends Controller
 {
@@ -94,7 +95,7 @@ class UserController extends Controller
         ]);
 
         $user = User::findOrFail($id);
-        $user->update($request->all());
+        $user->update($request->except('role'));
 
         return response()->json([
             'message' => 'User updated successfully!',
