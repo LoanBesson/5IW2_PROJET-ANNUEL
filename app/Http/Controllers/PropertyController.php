@@ -17,6 +17,7 @@ class PropertyController extends Controller
     public function __construct()
     {
         $this->middleware('auth:api')->except('index', 'show');
+        $this->middleware('can:isAdmin')->only('getAllProperties');
     }
 
 
@@ -53,6 +54,11 @@ class PropertyController extends Controller
         return PropertyResource::collection($properties);
     }
 
+    public function getAllProperties()
+    {
+        return PropertyResource::collection($properties);
+    }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -67,7 +73,6 @@ class PropertyController extends Controller
             $image = $request->file('image_path')->getClientOriginalName();
             $extension = $request->file('image_path')->getClientOriginalExtension();
             $fileNameToStore = str_replace(' ', '_', $image) . '_' . time() . '.' . $extension;
-
             $property->image_path = $request->file('image_path')->storeAs('public/images', $fileNameToStore);
             $property->save();
         }

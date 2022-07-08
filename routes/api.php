@@ -42,6 +42,7 @@ Route::middleware('api')->group(function () {
     Route::get('/admin/allPorpertiesCount', [PropertyController::class , 'getCountProperties']);
     Route::get('/admin/newUsersCount', [UserController::class , 'getNewCountUsers']);
     Route::get('/admin/allUsersCount', [UserController::class , 'getCountUsers']);
+    Route::get('/admin/getAllProperties', [PropertyController::class , 'getAllProperties']);
     Route::get('/users/{user}/contacts', [UserController::class , 'getContacts']);
     Route::get('/users/{user}/contacts/passed', [UserController::class , 'getPassedContacts']);
     Route::get('/users/{user}/favorites', [UserController::class , 'getFavorites']);
